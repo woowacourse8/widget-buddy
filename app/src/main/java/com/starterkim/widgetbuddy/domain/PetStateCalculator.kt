@@ -1,8 +1,7 @@
-package com.starterkim.widgetbuddy.logic
+package com.starterkim.widgetbuddy.domain
 
 import androidx.datastore.preferences.core.MutablePreferences
 import com.starterkim.widgetbuddy.data.PetDataStoreKeys
-import com.starterkim.widgetbuddy.util.*
 import java.time.LocalDate
 import java.util.concurrent.TimeUnit
 
@@ -40,7 +39,10 @@ object PetStateCalculator {
         return prefs
     }
 
-    private fun initializeData(prefs: MutablePreferences, newPetType: PetType) {
+    private fun initializeData(
+        prefs: MutablePreferences,
+        newPetType: PetType,
+    ) {
         setDefaultStat(prefs)
         prefs[PetDataStoreKeys.PET_TYPE] = newPetType.name
         prefs[PetDataStoreKeys.PET_NAME] = "뽀짝이"
@@ -140,14 +142,15 @@ object PetStateCalculator {
         val isSatietyLow = satiety <= 30
         val isBored = joy <= 30
 
-        val nextState = when {
-            misery >= 100 -> PetState.RUNAWAY
-            isWarning -> PetState.WARNING
-            isLonely -> PetState.NEEDS_LOVE
-            isSatietyLow -> PetState.SATIETY_LOW
-            isBored -> PetState.BORED
-            else -> PetState.IDLE
-        }
+        val nextState =
+            when {
+                misery >= 100 -> PetState.RUNAWAY
+                isWarning -> PetState.WARNING
+                isLonely -> PetState.NEEDS_LOVE
+                isSatietyLow -> PetState.SATIETY_LOW
+                isBored -> PetState.BORED
+                else -> PetState.IDLE
+            }
 
         prefs[PetDataStoreKeys.PET_STATE] = nextState.name
         return prefs
@@ -223,35 +226,43 @@ object PetStateCalculator {
         return prefs
     }
 
-    private fun calculateSatiety(prefs: MutablePreferences, currentTime: Long): Int {
+    private fun calculateSatiety(
+        prefs: MutablePreferences,
+        currentTime: Long,
+    ): Int {
         val lastFedTime =
             prefs[PetDataStoreKeys.LAST_FED_TIMESTAMP] ?: (currentTime - SATIETY_TOTAL_DURATION_MS)
         val elapsedSinceFed = currentTime - lastFedTime
-        val newSatiety = if (elapsedSinceFed < SATIETY_FULL_DURATION_MS) {
-            100
-        } else if (elapsedSinceFed < SATIETY_TOTAL_DURATION_MS) {
-            val timeIntoDecay = elapsedSinceFed - SATIETY_FULL_DURATION_MS
-            val decayProgress = timeIntoDecay.toDouble() / SATIETY_DECAY_DURATION_MS
-            (100 * (1.0 - decayProgress)).toInt().coerceIn(0, 100)
-        } else {
-            0
-        }
+        val newSatiety =
+            if (elapsedSinceFed < SATIETY_FULL_DURATION_MS) {
+                100
+            } else if (elapsedSinceFed < SATIETY_TOTAL_DURATION_MS) {
+                val timeIntoDecay = elapsedSinceFed - SATIETY_FULL_DURATION_MS
+                val decayProgress = timeIntoDecay.toDouble() / SATIETY_DECAY_DURATION_MS
+                (100 * (1.0 - decayProgress)).toInt().coerceIn(0, 100)
+            } else {
+                0
+            }
         return newSatiety
     }
 
-    private fun calculateJoy(prefs: MutablePreferences, currentTime: Long): Int {
+    private fun calculateJoy(
+        prefs: MutablePreferences,
+        currentTime: Long,
+    ): Int {
         val lastPlayedTime =
             prefs[PetDataStoreKeys.LAST_PLAYED_TIMESTAMP] ?: (currentTime - JOY_TOTAL_DURATION_MS)
         val elapsedSincePlayed = currentTime - lastPlayedTime
-        val newJoy = if (elapsedSincePlayed < JOY_FULL_DURATION_MS) {
-            100
-        } else if (elapsedSincePlayed < JOY_TOTAL_DURATION_MS) {
-            val timeIntoDecay = elapsedSincePlayed - JOY_FULL_DURATION_MS
-            val decayProcess = timeIntoDecay.toDouble() / JOY_DECAY_DURATION_MS
-            (100 * (1.0 - decayProcess)).toInt().coerceIn(0, 100)
-        } else {
-            0
-        }
+        val newJoy =
+            if (elapsedSincePlayed < JOY_FULL_DURATION_MS) {
+                100
+            } else if (elapsedSincePlayed < JOY_TOTAL_DURATION_MS) {
+                val timeIntoDecay = elapsedSincePlayed - JOY_FULL_DURATION_MS
+                val decayProcess = timeIntoDecay.toDouble() / JOY_DECAY_DURATION_MS
+                (100 * (1.0 - decayProcess)).toInt().coerceIn(0, 100)
+            } else {
+                0
+            }
         return newJoy
     }
 
@@ -260,7 +271,7 @@ object PetStateCalculator {
         newSatiety: Int,
         newJoy: Int,
         currentTime: Long,
-        elapsedTicks: Int
+        elapsedTicks: Int,
     ): Int {
         var currentMisery = prefs[PetDataStoreKeys.PET_MISERY] ?: 0
 

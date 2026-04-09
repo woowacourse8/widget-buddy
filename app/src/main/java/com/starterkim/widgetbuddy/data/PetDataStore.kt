@@ -17,13 +17,15 @@ import java.io.File
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "pet_prefs")
 
 object PetStateDefinition : GlanceStateDefinition<Preferences> {
-    override suspend fun getDataStore(context: Context, fileKey: String): DataStore<Preferences> {
-        return context.dataStore
-    }
+    override suspend fun getDataStore(
+        context: Context,
+        fileKey: String,
+    ): DataStore<Preferences> = context.dataStore
 
-    override fun getLocation(context: Context, fileKey: String): File {
-        return context.preferencesDataStoreFile("pet_prefs")
-    }
+    override fun getLocation(
+        context: Context,
+        fileKey: String,
+    ): File = context.preferencesDataStoreFile("pet_prefs")
 }
 
 /**
@@ -54,7 +56,6 @@ object PetDataStoreKeys {
     // 포인트 스탯
     val PET_AFFECTION_COUNT = intPreferencesKey("pet_affection_count")
     val DECOR_POINTS = intPreferencesKey("decor_points")
-
 
     // 이름 (펫 / 유저)
     val PET_NAME = stringPreferencesKey("pet_name")

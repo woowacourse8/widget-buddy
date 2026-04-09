@@ -6,8 +6,8 @@ import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.starterkim.widgetbuddy.data.dataStore
-import com.starterkim.widgetbuddy.logic.PetStateCalculator
-import com.starterkim.widgetbuddy.widget.PetWidget
+import com.starterkim.widgetbuddy.domain.PetStateCalculator
+import com.starterkim.widgetbuddy.ui.widget.PetWidget
 
 /**
  * WorkManager에 의해 주기적으로 실행되어
@@ -15,9 +15,8 @@ import com.starterkim.widgetbuddy.widget.PetWidget
  */
 class PetTickWorker(
     private val context: Context,
-    workerParams: WorkerParameters
+    workerParams: WorkerParameters,
 ) : CoroutineWorker(context, workerParams) {
-
     override suspend fun doWork(): Result {
         Log.d("PetTickWorker", "doWork() 실행됨! 15분경과")
 

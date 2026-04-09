@@ -1,4 +1,4 @@
-package com.starterkim.widgetbuddy.util
+package com.starterkim.widgetbuddy.domain
 
 import com.starterkim.widgetbuddy.R
 
@@ -15,12 +15,11 @@ enum class PetState {
     WARNING,
     RUNAWAY,
     FULL_FEEDBACK,
-    JOYFUL_FEEDBACK;
+    JOYFUL_FEEDBACK,
+    ;
 
     companion object {
-        fun fromString(value: String?): PetState {
-            return entries.find { it.name == value } ?: EGG
-        }
+        fun fromString(value: String?): PetState = entries.find { it.name == value } ?: EGG
     }
 }
 
@@ -35,7 +34,7 @@ enum class PetType(
     val hungryImage: Int,
     val fullImage: Int,
     val joyfulImage: Int,
-    val warningImage: Int
+    val warningImage: Int,
 ) {
     BAPSAE(
         idleImage = R.drawable.bapsae_idle,
@@ -44,7 +43,7 @@ enum class PetType(
         hungryImage = R.drawable.bapsae_hungry,
         fullImage = R.drawable.bapsae_full,
         joyfulImage = R.drawable.bapsae_joyful,
-        warningImage = R.drawable.bapsae_warning
+        warningImage = R.drawable.bapsae_warning,
     ),
     DRAGON(
         idleImage = R.drawable.dragon_idle,
@@ -53,21 +52,20 @@ enum class PetType(
         hungryImage = R.drawable.dragon_hungry,
         fullImage = R.drawable.dragon_full,
         joyfulImage = R.drawable.dragon_joyful,
-        warningImage = R.drawable.dragon_warning
+        warningImage = R.drawable.dragon_warning,
     ),
     NONE(
         idleImage = R.drawable.egg,
         lonelyImage = R.drawable.egg,
         boredImage = R.drawable.egg,
         hungryImage = R.drawable.egg,
-        fullImage =  R.drawable.egg,
+        fullImage = R.drawable.egg,
         joyfulImage = R.drawable.egg,
-        warningImage= R.drawable.egg,
-    );
+        warningImage = R.drawable.egg,
+    ),
+    ;
 
     companion object {
-        fun fromString(value: String?): PetType {
-            return entries.find { it.name == value } ?: NONE
-        }
+        fun fromString(value: String?): PetType = entries.find { it.name == value } ?: NONE
     }
 }

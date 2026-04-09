@@ -1,13 +1,18 @@
-package com.starterkim.widgetbuddy.util
+package com.starterkim.widgetbuddy.ui.mapper
 
 import com.starterkim.widgetbuddy.R
+import com.starterkim.widgetbuddy.domain.PetState
+import com.starterkim.widgetbuddy.domain.PetType
 
 /**
  * 펫의 상태(type, state)를 기반으로
  * 적절한 시각적 리소스(이미지) ID를 반환(매핑)합니다.
  */
 object PetVisualMapper {
-    fun getImageResource(type: PetType, state: PetState): Int {
+    fun getImageResource(
+        type: PetType,
+        state: PetState,
+    ): Int {
         if (state == PetState.EGG) {
             R.drawable.egg
         }
@@ -28,12 +33,11 @@ object PetVisualMapper {
         }
     }
 
-    fun getRoomBackground(decorPoints: Int): Int {
-        return when {
+    fun getRoomBackground(decorPoints: Int): Int =
+        when {
             decorPoints >= 20 -> R.drawable.background_3
             decorPoints >= 10 -> R.drawable.background_2
             decorPoints >= 5 -> R.drawable.background_1
             else -> R.drawable.background_0
         }
-    }
 }

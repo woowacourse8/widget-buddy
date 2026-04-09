@@ -1,4 +1,4 @@
-package com.starterkim.widgetbuddy.widget
+package com.starterkim.widgetbuddy.ui.widget
 
 import android.content.Context
 import androidx.glance.appwidget.GlanceAppWidget
@@ -17,14 +17,16 @@ class PetWidgetReceiver : GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget = PetWidget()
 
     override fun onEnabled(context: Context) {
-        val tickWorkRequest = PeriodicWorkRequestBuilder<PetTickWorker>(
-            15, TimeUnit.MINUTES
-        ).build()
+        val tickWorkRequest =
+            PeriodicWorkRequestBuilder<PetTickWorker>(
+                15,
+                TimeUnit.MINUTES,
+            ).build()
 
         WorkManager.getInstance(context).enqueueUniquePeriodicWork(
             WORK_NAME,
             ExistingPeriodicWorkPolicy.KEEP,
-            tickWorkRequest
+            tickWorkRequest,
         )
     }
 

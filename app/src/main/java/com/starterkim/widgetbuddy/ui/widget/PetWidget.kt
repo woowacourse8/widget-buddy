@@ -13,11 +13,9 @@ import androidx.glance.GlanceModifier
 import androidx.glance.Image
 import androidx.glance.ImageProvider
 import androidx.glance.action.action
-import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.action.actionRunCallback
-import androidx.glance.appwidget.action.actionStartActivity
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
 import androidx.glance.currentState
@@ -44,13 +42,11 @@ import com.starterkim.widgetbuddy.data.PetDataStoreKeys
 import com.starterkim.widgetbuddy.data.PetStateDefinition
 import com.starterkim.widgetbuddy.domain.PetState
 import com.starterkim.widgetbuddy.domain.PetType
-import com.starterkim.widgetbuddy.ui.MainActivity
 import com.starterkim.widgetbuddy.ui.mapper.PetDialogueMapper
 import com.starterkim.widgetbuddy.ui.mapper.PetVisualMapper
-import com.starterkim.widgetbuddy.ui.widget.callbacks.FeedCallback
 import com.starterkim.widgetbuddy.ui.widget.callbacks.HatchCallback
-import com.starterkim.widgetbuddy.ui.widget.callbacks.PlayCallback
-import com.starterkim.widgetbuddy.ui.widget.callbacks.TalkCallback
+import com.starterkim.widgetbuddy.ui.widget.component.LeftTouchArea
+import com.starterkim.widgetbuddy.ui.widget.component.RightTouchArea
 
 /**
  * 펫 위젯의 UI 구성을 담당한다.
@@ -58,7 +54,6 @@ import com.starterkim.widgetbuddy.ui.widget.callbacks.TalkCallback
 class PetWidget : GlanceAppWidget() {
     override val stateDefinition = PetStateDefinition
 
-    // [수정 1] ktlint 에러 방지를 위해 TAG를 companion object의 상수로 변경
     companion object {
         private const val TAG = "PetWidget"
     }
@@ -73,7 +68,6 @@ class PetWidget : GlanceAppWidget() {
         }
     }
 
-    // [수정 2] ktlint 함수명 에러(대문자 시작)를 피하기 위해 Content -> petContent 로 변경
     @SuppressLint("RestrictedApi")
     @Composable
     fun petContent(prefs: Preferences?) {
@@ -101,17 +95,13 @@ class PetWidget : GlanceAppWidget() {
                 petMessage,
             )
 
-        // [수정 3] BackgroundModifier.Color.Companion... 같이 불필요하게 길고 에러를 유발하는 코드 정리
         val isDebug = false
-        val debugButtonColor = if (isDebug) Color.Red.copy(alpha = 0.3f) else Color.Transparent
-        val debugBtnColor = if (isDebug) Color.Black.copy(alpha = 0.3f) else Color.Transparent
         val debugScreenColor = if (isDebug) Color.White.copy(alpha = 0.9f) else Color.Transparent
 
         val buttonSize = 45.dp
         val petImageSize = 70.dp
 
         // --- 2. 전체 레이아웃 ---
-        // [수정 4] GlanceModifier.Companion, Alignment.Companion 등 불필요한 .Companion 호출 모두 제거
         Box(
             modifier = GlanceModifier.fillMaxSize(),
             contentAlignment = Alignment.Center,
@@ -130,45 +120,11 @@ class PetWidget : GlanceAppWidget() {
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 // --- [C] 왼쪽 버튼 (Column): 밥주기 + 놀아주기 ---
-                Column(
-                    modifier =
-                        GlanceModifier
-                            .padding(start = 14.dp, end = 7.dp, top = 13.dp, bottom = 13.dp)
-                            .background(debugButtonColor),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    // (1) 밥주기 (왼쪽 위)
-                    Box(
-                        modifier =
-                            GlanceModifier
-                                .size(buttonSize)
-                                .background(debugBtnColor)
-                                .clickable(
-                                    if (petState != PetState.EGG && petState != PetState.RUNAWAY) {
-                                        actionRunCallback<FeedCallback>()
-                                    } else {
-                                        action { }
-                                    },
-                                ),
-                    ) { }
-
-                    Spacer(modifier = GlanceModifier.height(14.dp))
-
-                    // (2) 놀아주기 (왼쪽 아래)
-                    Box(
-                        modifier =
-                            GlanceModifier
-                                .size(buttonSize)
-                                .background(debugBtnColor)
-                                .clickable(
-                                    if (petState != PetState.EGG && petState != PetState.RUNAWAY) {
-                                        actionRunCallback<PlayCallback>()
-                                    } else {
-                                        action { }
-                                    },
-                                ),
-                    ) {}
-                }
+                LeftTouchArea(
+                    petState = petState,
+                    areaSize = buttonSize,
+                    modifier = GlanceModifier.fillMaxHeight()
+                )
 
                 // --- [D] 중간 (Column): 펫 화면 ---
                 Column(
@@ -259,41 +215,11 @@ class PetWidget : GlanceAppWidget() {
                 }
 
                 // --- [E] 오른쪽 버튼 (Column): 말걸기 + 메인 앱 ---
-                Column(
-                    modifier =
-                        GlanceModifier
-                            .padding(top = 15.dp, bottom = 15.dp, start = 2.dp, end = 16.dp)
-                            .background(debugButtonColor),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    // (1) 말걸기 (오른쪽 위)
-                    Box(
-                        modifier =
-                            GlanceModifier
-                                .size(buttonSize)
-                                .background(debugBtnColor)
-                                .clickable(
-                                    if (petState != PetState.EGG && petState != PetState.RUNAWAY) {
-                                        actionRunCallback<TalkCallback>()
-                                    } else {
-                                        action { }
-                                    },
-                                ),
-                    ) {}
-
-                    Spacer(modifier = GlanceModifier.height(14.dp))
-
-                    // (2) 메인 앱 방문 (오른쪽 아래)
-                    Box(
-                        modifier =
-                            GlanceModifier
-                                .size(buttonSize)
-                                .background(debugBtnColor)
-                                .clickable(
-                                    actionStartActivity<MainActivity>(),
-                                ),
-                    ) {}
-                }
+                RightTouchArea(
+                    petState = petState,
+                    areaSize = buttonSize,
+                    modifier = GlanceModifier.fillMaxHeight()
+                )
             }
         }
     }

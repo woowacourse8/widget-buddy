@@ -60,6 +60,7 @@ dependencies {
 
     // Jetpack Glance (위젯 UI)
     implementation(libs.androidx.glance.appwidget)
+    debugImplementation(libs.androidx.glance.appwidget.preview)
     // Jetpack WorkManager (백그라운드 작업)
     implementation(libs.androidx.work.runtime.ktx)
     // Jetpack DataStore (데이터 저장)

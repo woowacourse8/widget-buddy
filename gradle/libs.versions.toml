@@ -1,5 +1,5 @@
 [versions]
-agp = "9.1.0"
+agp = "9.1.1"
 coreSplashscreen = "1.2.0"
 datastorePreferences = "1.2.1"
 glanceAppwidget = "1.1.1"
@@ -13,8 +13,8 @@ activityCompose = "1.13.0"
 composeBom = "2026.03.01"
 materialIconsExtended = "1.7.8"
 workRuntimeKtx = "2.11.2"
-playServicesAds = "25.1.0"
-playServicesAdsApi = "25.1.0"
+playServicesAds = "25.2.0"
+playServicesAdsApi = "25.2.0"
 ktlint = "14.2.0"
 
 [libraries]
@@ -41,6 +41,7 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 google-play-services-ads = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "playServicesAds" }
 play-services-ads-api = { group = "com.google.android.gms", name = "play-services-ads-api", version.ref = "playServicesAdsApi" }
+androidx-glance-preview = { module = "androidx.glance:glance-preview", version.ref = "glanceAppwidget" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

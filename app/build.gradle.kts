@@ -71,4 +71,5 @@ dependencies {
     implementation(libs.google.play.services.ads)
     implementation(libs.androidx.material.icons.extended.v178)
     implementation(libs.androidx.core.splashscreen)
+    debugImplementation(libs.androidx.glance.preview)
 }

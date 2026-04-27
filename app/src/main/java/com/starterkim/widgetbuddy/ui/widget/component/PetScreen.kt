@@ -47,7 +47,7 @@ fun PetScreen(
     modifier: GlanceModifier = GlanceModifier
 ) {
     Column(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = GlanceModifier.height(45.dp))
@@ -134,16 +134,18 @@ fun PetScreen(
 }
 
 @OptIn(ExperimentalGlancePreviewApi::class)
-@Preview(widthDp = 200, heightDp = 120)
+@Preview(widthDp = 350, heightDp = 200)
 @Composable
 private fun PetScreenPreview() {
-    PetScreen(
-        petState = PetState.IDLE,
-        petName = "겸댕",
-        petImageRes = PetType.BAPSAE.idleImage,
-        petImageSize = 75.dp,
-        affectionCount = 3,
-        textToShow = "안녕 개발자",
-        modifier = GlanceModifier.fillMaxSize()
-    )
+    Box(modifier = GlanceModifier.fillMaxSize().background(Color.Black)) {
+        PetScreen(
+            petState = PetState.IDLE,
+            petName = "겸댕",
+            petImageRes = PetType.BAPSAE.idleImage,
+            petImageSize = 70.dp,
+            affectionCount = 3,
+            textToShow = "안녕 개발자",
+            modifier = GlanceModifier.fillMaxSize()
+        )
+    }
 }

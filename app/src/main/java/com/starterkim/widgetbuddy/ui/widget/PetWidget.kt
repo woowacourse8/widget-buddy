@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.datastore.preferences.core.Preferences
 import androidx.glance.GlanceId
@@ -20,6 +20,8 @@ import androidx.glance.layout.ContentScale
 import androidx.glance.layout.Row
 import androidx.glance.layout.fillMaxHeight
 import androidx.glance.layout.fillMaxSize
+import androidx.glance.preview.ExperimentalGlancePreviewApi
+import androidx.glance.preview.Preview
 import com.starterkim.widgetbuddy.R
 import com.starterkim.widgetbuddy.data.PetDataStoreKeys
 import com.starterkim.widgetbuddy.data.PetStateDefinition
@@ -47,13 +49,13 @@ class PetWidget : GlanceAppWidget() {
     ) {
         provideContent {
             val prefs = currentState<Preferences>()
-            petContent(prefs = prefs)
+            PetWidgetContent(prefs = prefs)
         }
     }
 
     @SuppressLint("RestrictedApi")
     @Composable
-    fun petContent(prefs: Preferences?) {
+    private fun PetWidgetContent(prefs: Preferences?) {
         // --- 1. (데이터 로딩) ---
         val petStateString = prefs?.get(PetDataStoreKeys.PET_STATE) ?: PetState.EGG.name
         val petTypeString = prefs?.get(PetDataStoreKeys.PET_TYPE) ?: PetType.NONE.name
@@ -78,13 +80,31 @@ class PetWidget : GlanceAppWidget() {
                 petMessage,
             )
 
-        val isDebug = false
-        val debugScreenColor = if (isDebug) Color.White.copy(alpha = 0.9f) else Color.Transparent
-
-        val buttonSize = 45.dp
+        val touchAreaSize = 45.dp
         val petImageSize = 70.dp
 
         // --- 2. 전체 레이아웃 ---
+        PetWidgetContent(
+            petState = petState,
+            petName = petName,
+            petImageRes = petImageRes,
+            petImageSize = petImageSize,
+            touchAreaSize = touchAreaSize,
+            affectionCount = affectionCount,
+            textToShow = textToShow
+        )
+    }
+
+    @Composable
+    private fun PetWidgetContent(
+        petState: PetState,
+        petName: String,
+        petImageRes: Int,
+        petImageSize: Dp,
+        touchAreaSize: Dp,
+        affectionCount: Int,
+        textToShow: String,
+    ) {
         Box(
             modifier = GlanceModifier.fillMaxSize(),
             contentAlignment = Alignment.Center,
@@ -105,8 +125,8 @@ class PetWidget : GlanceAppWidget() {
                 // --- [C] 왼쪽 버튼 (Column): 밥주기 + 놀아주기 ---
                 LeftTouchArea(
                     petState = petState,
-                    areaSize = buttonSize,
-                    modifier = GlanceModifier.fillMaxHeight()
+                    areaSize = touchAreaSize,
+                    modifier = GlanceModifier,
                 )
 
                 // --- [D] 중간 (Column): 펫 화면 ---
@@ -117,16 +137,36 @@ class PetWidget : GlanceAppWidget() {
                     petImageSize = petImageSize,
                     affectionCount = affectionCount,
                     textToShow = textToShow,
-                    modifier = GlanceModifier.fillMaxHeight()
+                    modifier = GlanceModifier.defaultWeight().fillMaxHeight()
                 )
 
                 // --- [E] 오른쪽 버튼 (Column): 말걸기 + 메인 앱 ---
                 RightTouchArea(
                     petState = petState,
-                    areaSize = buttonSize,
-                    modifier = GlanceModifier.fillMaxHeight()
+                    areaSize = touchAreaSize,
+                    modifier = GlanceModifier
                 )
             }
         }
+    }
+
+    // 펫스크린이 내려와 보이는 것은 신경 안 써도 됨.
+    @OptIn(ExperimentalGlancePreviewApi::class)
+    @Preview(widthDp = 360, heightDp = 220)
+    @Composable
+    private fun PetWidgetContentPreview() {
+        val petType = PetType.BAPSAE
+        val petState = PetState.IDLE
+        val petImageRes = PetVisualMapper.getImageResource(petType, petState)
+
+        PetWidgetContent(
+            petState = PetState.IDLE,
+            petName = "지우",
+            petImageRes = petImageRes,
+            petImageSize = 70.dp,
+            touchAreaSize = 45.dp,
+            affectionCount = 5,
+            textToShow = "안녕"
+        )
     }
 }

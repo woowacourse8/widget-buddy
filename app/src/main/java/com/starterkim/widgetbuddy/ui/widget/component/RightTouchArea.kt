@@ -1,6 +1,7 @@
 package com.starterkim.widgetbuddy.ui.widget.component
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.glance.GlanceModifier
@@ -8,6 +9,7 @@ import androidx.glance.action.action
 import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.action.actionRunCallback
+import androidx.glance.background
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
 import androidx.glance.layout.Column
@@ -15,17 +17,22 @@ import androidx.glance.layout.Spacer
 import androidx.glance.layout.height
 import androidx.glance.layout.padding
 import androidx.glance.layout.size
+import androidx.glance.preview.ExperimentalGlancePreviewApi
+import androidx.glance.preview.Preview
 import com.starterkim.widgetbuddy.domain.PetState
 import com.starterkim.widgetbuddy.ui.MainActivity
 import com.starterkim.widgetbuddy.ui.widget.callbacks.TalkCallback
 
-// 프리뷰 못 봄
 @Composable
 fun RightTouchArea(
     petState: PetState,
     areaSize: Dp,
-    modifier: GlanceModifier = GlanceModifier
+    modifier: GlanceModifier = GlanceModifier,
+    showTouchArea: Boolean = false,
 ) {
+    val debugAreaColor = if (showTouchArea) Color.Red.copy(alpha = 0.5f) else Color.Transparent
+    val areaModifier = GlanceModifier.size(areaSize).background(debugAreaColor)
+
     Column(
         modifier = modifier
             .padding(top = 15.dp, bottom = 15.dp, start = 2.dp, end = 16.dp),
@@ -33,13 +40,13 @@ fun RightTouchArea(
     ) {
         TalkTouchArea(
             petState = petState,
-            modifier = GlanceModifier.size(areaSize)
+            modifier = areaModifier
         )
 
         Spacer(modifier = GlanceModifier.height(14.dp))
 
         VisitAppTouchArea(
-            modifier = GlanceModifier.size(areaSize)
+            modifier = areaModifier
         )
     }
 }
@@ -71,4 +78,15 @@ private fun VisitAppTouchArea(
             actionStartActivity<MainActivity>(),
         ),
     ) {}
+}
+
+@OptIn(ExperimentalGlancePreviewApi::class)
+@Preview
+@Composable
+private fun RightTouchAreaPreview() {
+    RightTouchArea(
+        petState = PetState.IDLE,
+        areaSize = 45.dp,
+        showTouchArea = true
+    )
 }

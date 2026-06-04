@@ -16,6 +16,12 @@ import java.io.File
  */
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "pet_prefs")
 
+/**
+ * PetRepository 인스턴스를 제공하는 확장 프로퍼티
+ */
+val Context.petRepository: PetRepository
+    get() = PetRepository(this)
+
 object PetStateDefinition : GlanceStateDefinition<Preferences> {
     override suspend fun getDataStore(
         context: Context,
@@ -63,4 +69,30 @@ object PetDataStoreKeys {
 
     // 펫이 보내는 일회성 메시지
     val PET_MESSAGE = stringPreferencesKey("pet_message")
+}
+
+/**
+ * Preferences 객체를 PetStatus 도메인 모델로 변환한다.
+ */
+fun Preferences.toPetStatus(): com.starterkim.widgetbuddy.domain.PetStatus {
+    return com.starterkim.widgetbuddy.domain.PetStatus(
+        type = com.starterkim.widgetbuddy.domain.PetType.fromString(this[PetDataStoreKeys.PET_TYPE]),
+        state = com.starterkim.widgetbuddy.domain.PetState.fromString(this[PetDataStoreKeys.PET_STATE]),
+        name = this[PetDataStoreKeys.PET_NAME] ?: "뽀짝이",
+        userName = this[PetDataStoreKeys.USER_NAME] ?: "주인님",
+        satiety = this[PetDataStoreKeys.PET_SATIETY] ?: 100,
+        joy = this[PetDataStoreKeys.PET_JOY] ?: 100,
+        misery = this[PetDataStoreKeys.PET_MISERY] ?: 0,
+        affectionCount = this[PetDataStoreKeys.PET_AFFECTION_COUNT] ?: 0,
+        decorPoints = this[PetDataStoreKeys.DECOR_POINTS] ?: 0,
+        lastUpdatedTimestamp = this[PetDataStoreKeys.LAST_UPDATED_TIMESTAMP] ?: 0L,
+        lastMainAppVisitTimestamp = this[PetDataStoreKeys.LAST_MAIN_APP_VISIT_TIMESTAMP] ?: 0L,
+        lastFedTimestamp = this[PetDataStoreKeys.LAST_FED_TIMESTAMP] ?: 0L,
+        lastPlayedTimestamp = this[PetDataStoreKeys.LAST_PLAYED_TIMESTAMP] ?: 0L,
+        satietyZeroTimestamp = this[PetDataStoreKeys.SATIETY_ZERO_TIMESTAMP] ?: 0L,
+        joyZeroTimestamp = this[PetDataStoreKeys.JOY_ZERO_TIMESTAMP] ?: 0L,
+        lastAffectionUpdateDate = this[PetDataStoreKeys.LAST_AFFECTION_UPDATE_DATE] ?: "",
+        lastDecorPointDate = this[PetDataStoreKeys.LAST_DECOR_POINT_DATE] ?: "",
+        message = this[PetDataStoreKeys.PET_MESSAGE] ?: ""
+    )
 }

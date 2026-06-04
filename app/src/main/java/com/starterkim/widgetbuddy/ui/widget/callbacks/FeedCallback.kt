@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.glance.GlanceId
 import androidx.glance.action.ActionParameters
 import androidx.glance.appwidget.action.ActionCallback
-import com.starterkim.widgetbuddy.data.dataStore
+import com.starterkim.widgetbuddy.data.petRepository
 import com.starterkim.widgetbuddy.domain.PetStateCalculator
 import com.starterkim.widgetbuddy.ui.widget.PetWidget
 import kotlinx.coroutines.CoroutineScope
@@ -20,19 +20,17 @@ class FeedCallback : ActionCallback {
         glanceId: GlanceId,
         parameters: ActionParameters,
     ) {
-        context.dataStore.updateData { immutablePrefs ->
-            val mutablePrefs = immutablePrefs.toMutablePreferences()
-            PetStateCalculator.feedPet(mutablePrefs)
-            mutablePrefs
+        val repository = context.petRepository
+
+        repository.updateStatus { status ->
+            PetStateCalculator.feedPet(status)
         }
         PetWidget().update(context, glanceId)
 
         scope.launch {
             delay(5000L) // 5초 대기
-            context.dataStore.updateData { immutablePrefs ->
-                val mutablePrefs = immutablePrefs.toMutablePreferences()
-                PetStateCalculator.restoreStateAfterFeedback(mutablePrefs)
-                mutablePrefs
+            repository.updateStatus { status ->
+                PetStateCalculator.restoreStateAfterFeedback(status)
             }
             PetWidget().update(context, glanceId)
         }

@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,24 +18,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.starterkim.widgetbuddy.domain.PetState
-import com.starterkim.widgetbuddy.domain.PetType
+import com.starterkim.widgetbuddy.domain.PetStatus
 import com.starterkim.widgetbuddy.ui.mapper.PetVisualMapper
 import com.starterkim.widgetbuddy.ui.room.component.PetActionButton
 
 @Composable
 fun RoomScreen(
-    petState: PetState,
-    petType: PetType,
-    decorPoints: Int,
+    petStatus: PetStatus,
     onShowAd: () -> Unit,
     onGiveLoveClick: () -> Unit
 ) {
-    val petIsRunaway = petState == PetState.RUNAWAY
-    val petIsEgg = petState == PetState.EGG
+    val petIsRunaway = petStatus.hasRunAway
+    val petIsEgg = petStatus.isEgg
 
     Column(modifier = Modifier.fillMaxSize()) {
         // 1. 펫의 방
@@ -49,7 +44,7 @@ fun RoomScreen(
         ) {
             // [A] 배경 이미지 (포인트에 따라 변경)
             Image(
-                painter = painterResource(id = PetVisualMapper.getRoomBackground(decorPoints)),
+                painter = painterResource(id = PetVisualMapper.getRoomBackground(petStatus.decorPoints)),
                 contentDescription = "Pet House Background",
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop,
@@ -69,7 +64,7 @@ fun RoomScreen(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    "✨ $decorPoints P",
+                    "✨ ${petStatus.decorPoints} P",
                     color = Color.White,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
@@ -82,8 +77,8 @@ fun RoomScreen(
                     painterResource(
                         id =
                             PetVisualMapper.getImageResource(
-                                petType,
-                                petState,
+                                petStatus.type,
+                                petStatus.state,
                             ),
                     ),
                 contentDescription = "Pet",
@@ -100,5 +95,3 @@ fun RoomScreen(
         )
     }
 }
-
-

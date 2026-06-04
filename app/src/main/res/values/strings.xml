@@ -1,3 +1,59 @@
 <resources>
     <string name="app_name">Widget Buddy</string>
+    
+    <!-- MainActivity -->
+    <string name="ad_loading_try_later">광고 로드 중.. 잠시 후 다시 시도하세요.</string>
+    <string name="pet_returned">펫이 돌아왔습니다!</string>
+    <string name="already_gave_love">오늘은 이미 사랑을 줬어요. (총 %1$d P)</string>
+    <string name="current_settings">현재 설정</string>
+    <string name="pet_status_info">펫 이름: %1$s, 주인님 이름: %2$s</string>
+    <string name="input_new_pet_name_title">펫의 새 이름을 지어주세요!</string>
+    <string name="new_pet_name_label">새 펫 이름 입력</string>
+    <string name="pet_name_save_complete">펫 이름 저장 완료!</string>
+    <string name="save_pet_name">펫 이름 저장하기</string>
+    <string name="input_user_name_title">주인님의 이름을 알려주세요!</string>
+    <string name="user_name_label">주인님 이름 입력</string>
+    <string name="user_name_save_complete">주인님 이름 저장 완료!</string>
+    <string name="save_user_name">주인님 이름 저장하기</string>
+
+    <!-- PetActionButton -->
+    <string name="action_bring_pet_back">[광고 시청] 펫 다시 데려오기</string>
+    <string name="action_still_egg">아직 알 상태입니다. 위젯에서 부화시켜주세요!</string>
+    <string name="action_give_love">사랑 주기 ❤️ (포인트 +1)</string>
+
+    <!-- PetDialogueMapper -->
+    <string name="state_satiety_low">배고파... 밥 줘! (포만감: %1$d)</string>
+    <string name="state_bored">심심해...놀아줘! (즐거움: %1$d)</string>
+    <string name="stats_format">포만감: %1$d, 즐거움: %2$d</string>
+    <string name="dialogue_miss_user">%1$s 보고싶어!</string>
+    <string name="dialogue_weather">오늘 날씨 어때~</string>
+    <string name="dialogue_hehe">헤헤...</string>
+    <string name="dialogue_what_time">지금 몇 시지?</string>
+    <string name="dialogue_rolling">뒹굴뒹굴...</string>
+    <string name="dialogue_watching">보고 있었어?</string>
+    <string name="dialogue_what_doing">%1$s 뭐해?</string>
+    <string name="dialogue_doing_well">나 잘 지내고 있어!</string>
+    <string name="dialogue_home_best">역시 집이 최고야.</string>
+    <string name="dialogue_pet_cute">%1$s 이뻐?</string>
+    <string name="feedback_yam">냠냠! 정말 맛있었어! 😋</string>
+    <string name="feedback_full">배가 빵빵해~ 최고야! (포만감: %1$d)</string>
+    <string name="feedback_full_thanks">든든해졌어! 고마워!</string>
+    <string name="feedback_sleepy">잠깐 졸린다.. Zzz</string>
+    <string name="feedback_joyful">까르르! 너무 신나! >_&lt;</string>
+    <string name="feedback_happy">세상에서 내가 제일 행복해! (즐거움: %1$d)</string>
+    <string name="feedback_energy">에너지가 가득 찼어! 고마워!</string>
+    <string name="feedback_play_again">다음에 또 놀자!</string>
+    <string name="needs_love_1">우리 집에 언제 올 거야?</string>
+    <string name="needs_love_2">앱에서 나 좀 만나줘~</string>
+    <string name="needs_love_3">할 말 있는데..(톡톡)</string>
+    <string name="needs_love_4">(두리번)혹시 지금 시간 돼?</string>
+    <string name="warning_1">이젠..정말 지쳤어.</string>
+    <string name="warning_2">아무래도.. 우리 인연이 아닌가 봐</string>
+    <string name="warning_3">나..혹시..버려진 거야? ㅠㅠ</string>
+    <string name="warning_4">나.. 완전히 잊힌 거 같아.</string>
+    <string name="warning_5">떠날 준비를.. 해야 할지도 모르겠어.</string>
+    <string name="runaway_1">잠시.. 멀리 여행 좀 다녀올게.</string>
+    <string name="runaway_2">기다렸는데.. 결국 오지 않았네. \n 잘 지내.</string>
+    <string name="runaway_3">더이상 여기 있을 이유가 없어진 것 같아. \n 안녕.</string>
+    <string name="runaway_4">나 혹시 귀찮아졌어..? \n 조용히 사라져줄게.</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.starterkim.widgetbuddy.ui.room
+package com.starterkim.widgetbuddy.presentation.room
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,8 +21,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.starterkim.widgetbuddy.domain.PetStatus
-import com.starterkim.widgetbuddy.ui.mapper.PetVisualMapper
-import com.starterkim.widgetbuddy.ui.room.component.PetActionButton
+import com.starterkim.widgetbuddy.presentation.mapper.PetVisualMapper
+import com.starterkim.widgetbuddy.presentation.room.component.PetActionButton
 
 @Composable
 fun RoomScreen(
@@ -34,7 +34,6 @@ fun RoomScreen(
     val petIsEgg = petStatus.isEgg
 
     Column(modifier = Modifier.fillMaxSize()) {
-        // 1. 펫의 방
         Box(
             modifier =
                 Modifier
@@ -42,7 +41,6 @@ fun RoomScreen(
                     .weight(1f),
             contentAlignment = Alignment.Center,
         ) {
-            // [A] 배경 이미지 (포인트에 따라 변경)
             Image(
                 painter = painterResource(id = PetVisualMapper.getRoomBackground(petStatus.decorPoints)),
                 contentDescription = "Pet House Background",
@@ -50,7 +48,6 @@ fun RoomScreen(
                 contentScale = ContentScale.Crop,
             )
 
-            // [B] 꾸미기 포인트 표시
             Row(
                 modifier =
                     Modifier
@@ -71,7 +68,6 @@ fun RoomScreen(
                 )
             }
 
-            // [C] 펫 이미지
             Image(
                 painter =
                     painterResource(
@@ -86,7 +82,6 @@ fun RoomScreen(
             )
         }
 
-        // 2. 컨트롤러 (사랑 주기 / 가출 복귀 버튼)
         PetActionButton(
             petIsRunaway = petIsRunaway,
             petIsEgg = petIsEgg,

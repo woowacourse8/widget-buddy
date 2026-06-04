@@ -1,4 +1,4 @@
-package com.starterkim.widgetbuddy.ui.widget.callbacks
+package com.starterkim.widgetbuddy.presentation.widget.callbacks
 
 import android.content.Context
 import androidx.glance.GlanceId
@@ -6,13 +6,13 @@ import androidx.glance.action.ActionParameters
 import androidx.glance.appwidget.action.ActionCallback
 import com.starterkim.widgetbuddy.data.petRepository
 import com.starterkim.widgetbuddy.domain.PetStateCalculator
-import com.starterkim.widgetbuddy.ui.widget.PetWidget
+import com.starterkim.widgetbuddy.presentation.widget.PetWidget
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class FeedCallback : ActionCallback {
+class PlayCallback : ActionCallback {
     private val scope = CoroutineScope(Dispatchers.IO)
 
     override suspend fun onAction(
@@ -23,7 +23,7 @@ class FeedCallback : ActionCallback {
         val repository = context.petRepository
 
         repository.updateStatus { status ->
-            PetStateCalculator.feedPet(status)
+            PetStateCalculator.playWithPet(status)
         }
         PetWidget().update(context, glanceId)
 

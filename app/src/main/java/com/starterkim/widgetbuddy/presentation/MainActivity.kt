@@ -1,4 +1,4 @@
-package com.starterkim.widgetbuddy.ui
+package com.starterkim.widgetbuddy.presentation
 
 import android.os.Bundle
 import android.util.Log
@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.glance.appwidget.updateAll
@@ -36,22 +37,23 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
+import com.starterkim.widgetbuddy.R
 import com.starterkim.widgetbuddy.data.petRepository
 import com.starterkim.widgetbuddy.domain.PetStatus
-import com.starterkim.widgetbuddy.ui.app.component.BottomNavigationBar
-import com.starterkim.widgetbuddy.ui.room.RoomScreen
-import com.starterkim.widgetbuddy.ui.theme.WidgetBuddyTheme
-import com.starterkim.widgetbuddy.ui.widget.PetWidget
+import com.starterkim.widgetbuddy.presentation.common.BottomNavigationBar
+import com.starterkim.widgetbuddy.presentation.room.RoomScreen
+import com.starterkim.widgetbuddy.presentation.common.theme.WidgetBuddyTheme
+import com.starterkim.widgetbuddy.presentation.widget.PetWidget
 import kotlinx.coroutines.launch
 
 enum class MainScreen {
-    PET_HOUSE, SETTINGS,
+    PET_HOUSE,
+    SETTINGS,
 }
 
 class MainActivity : ComponentActivity() {
     private var mRewardedAd: RewardedAd? = null
 
-    // Hilt 대신 사용하는 간단한 ViewModel 생성 방식
     private val viewModel: MainViewModel by viewModels {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -79,7 +81,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    // --- 광고 로직 ---
     private fun loadRewardedAd() {
         val adRequest = AdRequest.Builder().build()
         RewardedAd.load(
@@ -108,7 +109,7 @@ class MainActivity : ComponentActivity() {
             }
         } ?: run {
             Log.d(TAG, "The rewarded ad wasn't ready yet.")
-            Toast.makeText(this, "광고 로드 중.. 잠시 후 다시 시도하세요.", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.ad_loading_try_later), Toast.LENGTH_LONG).show()
         }
     }
 
@@ -117,11 +118,10 @@ class MainActivity : ComponentActivity() {
         lifecycleScope.launch {
             PetWidget().updateAll(this@MainActivity)
         }
-        Toast.makeText(this, "펫이 돌아왔습니다!", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, getString(R.string.pet_returned), Toast.LENGTH_SHORT).show()
         loadRewardedAd()
     }
 
-    // --- Composable 영역 ---
     @Composable
     fun MainAppScreen(status: PetStatus) {
         var currentScreen by remember { mutableStateOf(MainScreen.PET_HOUSE) }
@@ -140,27 +140,23 @@ class MainActivity : ComponentActivity() {
                     .fillMaxSize(),
             ) {
                 when (currentScreen) {
-                    MainScreen.PET_HOUSE -> RoomScreen(
-                        petStatus = status,
-                        onShowAd = { showAdAndBringPetBack() },
-                        onGiveLoveClick = {
-                            viewModel.giveLoveAndGetPoints { message ->
-                                lifecycleScope.launch {
-                                    PetWidget().updateAll(this@MainActivity)
-                                }
-                                if (message != null) {
-                                    Toast.makeText(
-                                        this@MainActivity, message, Toast.LENGTH_LONG
-                                    ).show()
-                                } else {
-                                    Toast.makeText(
-                                        this@MainActivity,
-                                        "오늘은 이미 사랑을 줬어요. (총 ${status.decorPoints} P)",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                    MainScreen.PET_HOUSE ->
+                        RoomScreen(
+                            petStatus = status,
+                            onShowAd = { showAdAndBringPetBack() },
+                            onGiveLoveClick = {
+                                viewModel.giveLoveAndGetPoints { message ->
+                                    lifecycleScope.launch {
+                                        PetWidget().updateAll(this@MainActivity)
+                                    }
+                                    if (message != null) {
+                                        Toast.makeText(this@MainActivity, message, Toast.LENGTH_LONG).show()
+                                    } else {
+                                        Toast.makeText(this@MainActivity, getString(R.string.already_gave_love, status.decorPoints), Toast.LENGTH_SHORT).show()
+                                    }
                                 }
                             }
-                        })
+                        )
 
                     MainScreen.SETTINGS -> SettingsScreen(status)
                 }
@@ -180,51 +176,51 @@ class MainActivity : ComponentActivity() {
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
-                text = "현재 설정",
+                text = stringResource(R.string.current_settings),
                 style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier.padding(bottom = 8.dp),
             )
-            Text("펫 이름: ${status.name}, 주인님 이름: ${status.userName}")
+            Text(stringResource(R.string.pet_status_info, status.name, status.userName))
             Spacer(modifier = Modifier.height(32.dp))
 
-            Text(text = "펫의 새 이름을 지어주세요!", style = MaterialTheme.typography.titleLarge)
+            Text(text = stringResource(R.string.input_new_pet_name_title), style = MaterialTheme.typography.titleLarge)
             Spacer(modifier = Modifier.height(16.dp))
             TextField(
                 value = petNameInput,
                 onValueChange = { petNameInput = it },
-                label = { Text("새 펫 이름 입력") },
+                label = { Text(stringResource(R.string.new_pet_name_label)) },
             )
             Spacer(modifier = Modifier.height(16.dp))
             Button(onClick = {
                 if (petNameInput.isNotBlank()) {
                     viewModel.updatePetName(petNameInput)
                     lifecycleScope.launch { PetWidget().updateAll(this@MainActivity) }
-                    Toast.makeText(this@MainActivity, "펫 이름 저장 완료!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MainActivity, getString(R.string.pet_name_save_complete), Toast.LENGTH_SHORT).show()
                     petNameInput = ""
                 }
             }) {
-                Text("펫 이름 저장하기")
+                Text(stringResource(R.string.save_pet_name))
             }
 
             Spacer(modifier = Modifier.height(48.dp))
 
-            Text(text = "주인님의 이름을 알려주세요!", style = MaterialTheme.typography.titleLarge)
+            Text(text = stringResource(R.string.input_user_name_title), style = MaterialTheme.typography.titleLarge)
             Spacer(modifier = Modifier.height(16.dp))
             TextField(
                 value = userNameInput,
                 onValueChange = { userNameInput = it },
-                label = { Text("주인님 이름 입력") },
+                label = { Text(stringResource(R.string.user_name_label)) },
             )
             Spacer(modifier = Modifier.height(16.dp))
             Button(onClick = {
                 if (userNameInput.isNotBlank()) {
                     viewModel.updateUserName(userNameInput)
                     lifecycleScope.launch { PetWidget().updateAll(this@MainActivity) }
-                    Toast.makeText(this@MainActivity, "주인님 이름 저장 완료!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MainActivity, getString(R.string.user_name_save_complete), Toast.LENGTH_SHORT).show()
                     userNameInput = ""
                 }
             }) {
-                Text("주인님 이름 저장하기")
+                Text(stringResource(R.string.save_user_name))
             }
         }
     }

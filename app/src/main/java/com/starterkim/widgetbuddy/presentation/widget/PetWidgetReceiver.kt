@@ -1,4 +1,4 @@
-package com.starterkim.widgetbuddy.ui.widget
+package com.starterkim.widgetbuddy.presentation.widget
 
 import android.content.Context
 import androidx.glance.appwidget.GlanceAppWidget

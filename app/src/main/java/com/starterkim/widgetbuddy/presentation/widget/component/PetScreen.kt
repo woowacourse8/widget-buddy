@@ -1,4 +1,4 @@
-package com.starterkim.widgetbuddy.ui.widget.component
+package com.starterkim.widgetbuddy.presentation.widget.component
 
 import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
@@ -33,7 +33,7 @@ import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import com.starterkim.widgetbuddy.domain.PetState
 import com.starterkim.widgetbuddy.domain.PetType
-import com.starterkim.widgetbuddy.ui.widget.callbacks.HatchCallback
+import com.starterkim.widgetbuddy.presentation.widget.callbacks.HatchCallback
 
 @SuppressLint("RestrictedApi")
 @Composable

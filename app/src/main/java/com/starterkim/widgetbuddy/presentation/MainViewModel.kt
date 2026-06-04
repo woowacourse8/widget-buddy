@@ -1,4 +1,4 @@
-package com.starterkim.widgetbuddy.ui
+package com.starterkim.widgetbuddy.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

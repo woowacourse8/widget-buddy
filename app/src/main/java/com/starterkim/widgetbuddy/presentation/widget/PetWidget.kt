@@ -1,4 +1,4 @@
-package com.starterkim.widgetbuddy.ui.widget
+package com.starterkim.widgetbuddy.presentation.widget
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -26,15 +26,12 @@ import com.starterkim.widgetbuddy.data.PetStateDefinition
 import com.starterkim.widgetbuddy.data.toPetStatus
 import com.starterkim.widgetbuddy.domain.PetState
 import com.starterkim.widgetbuddy.domain.PetType
-import com.starterkim.widgetbuddy.ui.mapper.PetDialogueMapper
-import com.starterkim.widgetbuddy.ui.mapper.PetVisualMapper
-import com.starterkim.widgetbuddy.ui.widget.component.LeftTouchArea
-import com.starterkim.widgetbuddy.ui.widget.component.PetScreen
-import com.starterkim.widgetbuddy.ui.widget.component.RightTouchArea
+import com.starterkim.widgetbuddy.presentation.mapper.PetDialogueMapper
+import com.starterkim.widgetbuddy.presentation.mapper.PetVisualMapper
+import com.starterkim.widgetbuddy.presentation.widget.component.LeftTouchArea
+import com.starterkim.widgetbuddy.presentation.widget.component.PetScreen
+import com.starterkim.widgetbuddy.presentation.widget.component.RightTouchArea
 
-/**
- * 펫 위젯의 UI 구성을 담당한다.
- */
 class PetWidget : GlanceAppWidget() {
     override val stateDefinition = PetStateDefinition
 
@@ -44,16 +41,17 @@ class PetWidget : GlanceAppWidget() {
     ) {
         provideContent {
             val prefs = currentState<Preferences>()
-            PetWidgetContent(prefs = prefs)
+            PetWidgetContent(context, prefs = prefs)
         }
     }
 
     @SuppressLint("RestrictedApi")
     @Composable
-    private fun PetWidgetContent(prefs: Preferences?) {
+    private fun PetWidgetContent(context: Context, prefs: Preferences?) {
         val status = prefs?.toPetStatus() ?: com.starterkim.widgetbuddy.domain.PetStatus()
 
         val textToShow = PetDialogueMapper.getDialogue(
+            context,
             status.state,
             status.satiety,
             status.joy,

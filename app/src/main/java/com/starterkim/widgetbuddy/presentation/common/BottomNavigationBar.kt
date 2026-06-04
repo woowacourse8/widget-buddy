@@ -1,4 +1,4 @@
-package com.starterkim.widgetbuddy.ui.app.component
+package com.starterkim.widgetbuddy.presentation.common
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
@@ -8,7 +8,7 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import com.starterkim.widgetbuddy.ui.MainScreen
+import com.starterkim.widgetbuddy.presentation.MainScreen
 
 @Composable
 fun BottomNavigationBar(

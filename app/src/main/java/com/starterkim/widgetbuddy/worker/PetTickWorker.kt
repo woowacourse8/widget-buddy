@@ -6,7 +6,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.starterkim.widgetbuddy.data.petRepository
 import com.starterkim.widgetbuddy.domain.PetStateCalculator
-import com.starterkim.widgetbuddy.ui.widget.PetWidget
+import com.starterkim.widgetbuddy.presentation.widget.PetWidget
 
 class PetTickWorker(
     private val context: Context,

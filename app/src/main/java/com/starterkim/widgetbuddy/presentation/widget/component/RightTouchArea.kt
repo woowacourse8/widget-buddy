@@ -1,4 +1,4 @@
-package com.starterkim.widgetbuddy.ui.widget.component
+package com.starterkim.widgetbuddy.presentation.widget.component
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
@@ -20,8 +20,8 @@ import androidx.glance.layout.size
 import androidx.glance.preview.ExperimentalGlancePreviewApi
 import androidx.glance.preview.Preview
 import com.starterkim.widgetbuddy.domain.PetState
-import com.starterkim.widgetbuddy.ui.MainActivity
-import com.starterkim.widgetbuddy.ui.widget.callbacks.TalkCallback
+import com.starterkim.widgetbuddy.presentation.MainActivity
+import com.starterkim.widgetbuddy.presentation.widget.callbacks.TalkCallback
 
 @Composable
 fun RightTouchArea(

@@ -1,4 +1,4 @@
-package com.starterkim.widgetbuddy.ui.mapper
+package com.starterkim.widgetbuddy.presentation.mapper
 
 import com.starterkim.widgetbuddy.R
 import com.starterkim.widgetbuddy.domain.PetState

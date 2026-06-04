@@ -7,25 +7,14 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -38,13 +27,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.datastore.preferences.core.edit
 import androidx.glance.appwidget.updateAll
@@ -59,7 +43,8 @@ import com.starterkim.widgetbuddy.data.dataStore
 import com.starterkim.widgetbuddy.domain.PetState
 import com.starterkim.widgetbuddy.domain.PetStateCalculator
 import com.starterkim.widgetbuddy.domain.PetType
-import com.starterkim.widgetbuddy.ui.mapper.PetVisualMapper
+import com.starterkim.widgetbuddy.ui.app.component.BottomNavigationBar
+import com.starterkim.widgetbuddy.ui.room.RoomScreen
 import com.starterkim.widgetbuddy.ui.theme.WidgetBuddyTheme
 import com.starterkim.widgetbuddy.ui.widget.PetWidget
 import kotlinx.coroutines.flow.map
@@ -76,7 +61,8 @@ class MainActivity : ComponentActivity() {
 
     companion object {
         private const val TAG = "MainActivity"
-        private const val AD_UNIT_ID = "ca-app-pub-3940256099942544/5224354917"
+        private const val AD_TEST_ID = "ca-app-pub-3940256099942544/5224354917"
+        private const val AD_UNIT_ID = "ca-app-pub-4729200165720419/7331412876"
     }
 
     @SuppressLint("FlowOperatorInvokedInComposition")
@@ -103,7 +89,7 @@ class MainActivity : ComponentActivity() {
                         it[PetDataStoreKeys.DECOR_POINTS] ?: 0
                     }.collectAsState(initial = 0)
 
-                mainAppScreen(petState, petType, decorPoints)
+                MainAppScreen(petState, petType, decorPoints)
             }
         }
     }
@@ -203,17 +189,18 @@ class MainActivity : ComponentActivity() {
 
     // --- Composable 영역 ---
     @Composable
-    fun mainAppScreen(
+    fun MainAppScreen(
         petState: PetState,
         petType: PetType,
         decorPoints: Int,
     ) {
         var currentScreen by remember { mutableStateOf(MainScreen.PET_HOUSE) }
         val context = LocalContext.current
+        val coroutineScope = rememberCoroutineScope()
 
         Scaffold(
             bottomBar = {
-                bottomNavigationBar(
+                BottomNavigationBar(
                     currentScreen = currentScreen,
                     onScreenChange = { currentScreen = it },
                 )
@@ -226,145 +213,32 @@ class MainActivity : ComponentActivity() {
             ) {
                 when (currentScreen) {
                     MainScreen.PET_HOUSE ->
-                        petHouseScreen(
+                        RoomScreen(
                             petState = petState,
                             petType = petType,
                             decorPoints = decorPoints,
                             onShowAd = { showAdAndBringPetBack(context) },
+                            onGiveLoveClick = {
+                                coroutineScope.launch {
+                                    val (totalPoints, didIncrease) = giveLoveAndGetPoints(context)
+                                    PetWidget().updateAll(context)
+
+                                    if (didIncrease) {
+                                        val message = when (totalPoints) {
+                                            5 -> "방에 포근한 카펫이 생겼다! (5P 달성)"
+                                            10 -> "따뜻한 벽난로가 생겼다! (10P 달성)"
+                                            20 -> "폭신한 소파가 생겼다! (20P 달성)"
+                                            else -> "사랑 주기 완료! (현재 $totalPoints P)"
+                                        }
+                                        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+                                    } else {
+                                        Toast.makeText(context, "오늘은 이미 사랑을 줬어요. (총 $totalPoints P)", Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+                            }
                         )
 
                     MainScreen.SETTINGS -> settingsScreen()
-                }
-            }
-        }
-    }
-
-    @Composable
-    fun bottomNavigationBar(
-        currentScreen: MainScreen,
-        onScreenChange: (MainScreen) -> Unit,
-    ) {
-        NavigationBar {
-            NavigationBarItem(
-                selected = currentScreen == MainScreen.PET_HOUSE,
-                onClick = { onScreenChange(MainScreen.PET_HOUSE) },
-                icon = { Icon(imageVector = Icons.Filled.Home, contentDescription = "펫 하우스") },
-            )
-            NavigationBarItem(
-                selected = currentScreen == MainScreen.SETTINGS,
-                onClick = { onScreenChange(MainScreen.SETTINGS) },
-                icon = { Icon(Icons.Filled.Settings, contentDescription = "설정") },
-            )
-        }
-    }
-
-    // --- 펫 하우스 화면: 배경 이미지와 사랑주기 버튼, 꾸미기 포인트 ---
-    @Composable
-    fun petHouseScreen(
-        petState: PetState,
-        petType: PetType,
-        decorPoints: Int,
-        onShowAd: () -> Unit,
-    ) {
-        val context = LocalContext.current
-        val coroutineScope = rememberCoroutineScope()
-        val petIsRunaway = petState == PetState.RUNAWAY
-        val petIsEgg = petState == PetState.EGG
-
-        Column(modifier = Modifier.fillMaxSize()) {
-            // 1. 펫의 방
-            Box(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .weight(1f),
-                contentAlignment = Alignment.Center,
-            ) {
-                // [A] 배경 이미지 (포인트에 따라 변경)
-                Image(
-                    painter = painterResource(id = PetVisualMapper.getRoomBackground(decorPoints)),
-                    contentDescription = "Pet House Background",
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop,
-                )
-
-                // [B] 꾸미기 포인트 표시
-                Row(
-                    modifier =
-                        Modifier
-                            .align(Alignment.TopEnd)
-                            .padding(16.dp)
-                            .background(
-                                Color.Black.copy(alpha = 0.5f),
-                                shape = MaterialTheme.shapes.extraSmall,
-                            ).padding(horizontal = 8.dp, vertical = 4.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text(
-                        "✨ $decorPoints P",
-                        color = Color.White,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
-                    )
-                }
-
-                // [C] 펫 이미지
-                Image(
-                    painter =
-                        painterResource(
-                            id =
-                                PetVisualMapper.getImageResource(
-                                    petType,
-                                    petState,
-                                ),
-                        ),
-                    contentDescription = "Pet",
-                    modifier = Modifier.size(120.dp),
-                )
-            }
-
-            // 2. 컨트롤러 (사랑 주기 / 가출 복귀 버튼)
-            Column(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                if (petIsRunaway) {
-                    Button(onClick = onShowAd) {
-                        Text("[광고 시청] 펫 다시 데려오기")
-                    }
-                } else if (petIsEgg) {
-                    Text("아직 알 상태입니다. 위젯에서 부화시켜주세요!", color = Color.Gray)
-                } else {
-                    Button(onClick = {
-                        coroutineScope.launch {
-                            val (totalPoints, didIncrease) = giveLoveAndGetPoints(context)
-
-                            PetWidget().updateAll(context)
-
-                            if (didIncrease) {
-                                val message =
-                                    when (totalPoints) {
-                                        5 -> "방에 포근한 카펫이 생겼다! (5P 달성)"
-                                        10 -> "따뜻한 벽난로가 생겼다! (10P 달성)"
-                                        20 -> "폭신한 소파가 생겼다! (20P 달성)"
-                                        else -> "사랑 주기 완료! (현재 $totalPoints P)"
-                                    }
-                                Toast.makeText(context, message, Toast.LENGTH_LONG).show()
-                            } else {
-                                Toast
-                                    .makeText(
-                                        context,
-                                        "오늘은 이미 사랑을 줬어요. (총 $totalPoints P)",
-                                        Toast.LENGTH_SHORT,
-                                    ).show()
-                            }
-                        }
-                    }) {
-                        Text("사랑 주기 ❤️ (포인트 +1)")
-                    }
                 }
             }
         }

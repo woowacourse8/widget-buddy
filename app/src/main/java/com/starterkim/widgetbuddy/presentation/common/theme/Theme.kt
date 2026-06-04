@@ -1,4 +1,4 @@
-package com.starterkim.widgetbuddy.ui.theme
+package com.starterkim.widgetbuddy.presentation.common.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

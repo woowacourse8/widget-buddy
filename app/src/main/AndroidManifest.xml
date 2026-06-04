@@ -15,7 +15,7 @@
         android:theme="@style/Theme.WidgetBuddy">
 
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".presentation.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.App.Starting">
             <intent-filter>
@@ -26,7 +26,7 @@
         </activity>
 
         <receiver
-            android:name=".ui.widget.PetWidgetReceiver"
+            android:name=".presentation.widget.PetWidgetReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

@@ -1,12 +1,12 @@
-package com.starterkim.widgetbuddy.ui.widget.callbacks
+package com.starterkim.widgetbuddy.presentation.widget.callbacks
 
 import android.content.Context
 import androidx.glance.GlanceId
 import androidx.glance.action.ActionParameters
 import androidx.glance.appwidget.action.ActionCallback
-import com.starterkim.widgetbuddy.data.dataStore
+import com.starterkim.widgetbuddy.data.petRepository
 import com.starterkim.widgetbuddy.domain.PetStateCalculator
-import com.starterkim.widgetbuddy.ui.widget.PetWidget
+import com.starterkim.widgetbuddy.presentation.widget.PetWidget
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -20,19 +20,17 @@ class PlayCallback : ActionCallback {
         glanceId: GlanceId,
         parameters: ActionParameters,
     ) {
-        context.dataStore.updateData { immutablePrefs ->
-            val mutablePrefs = immutablePrefs.toMutablePreferences()
-            PetStateCalculator.playWithPet(mutablePrefs)
-            mutablePrefs
+        val repository = context.petRepository
+
+        repository.updateStatus { status ->
+            PetStateCalculator.playWithPet(status)
         }
         PetWidget().update(context, glanceId)
 
         scope.launch {
             delay(5000L) // 5초 대기
-            context.dataStore.updateData { immutablePrefs ->
-                val mutablePrefs = immutablePrefs.toMutablePreferences()
-                PetStateCalculator.restoreStateAfterFeedback(mutablePrefs)
-                mutablePrefs
+            repository.updateStatus { status ->
+                PetStateCalculator.restoreStateAfterFeedback(status)
             }
             PetWidget().update(context, glanceId)
         }

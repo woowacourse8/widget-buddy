@@ -29,8 +29,8 @@ class PetRepository(private val context: Context) {
     }
 
     private fun saveToPrefs(status: PetStatus, prefs: MutablePreferences) {
-        prefs[PetDataStoreKeys.PET_TYPE] = status.type.name
-        prefs[PetDataStoreKeys.PET_STATE] = status.state.name
+        prefs[PetDataStoreKeys.PET_TYPE] = status.type.id
+        prefs[PetDataStoreKeys.PET_STATE] = status.state.id
         prefs[PetDataStoreKeys.PET_NAME] = status.name
         prefs[PetDataStoreKeys.USER_NAME] = status.userName
         prefs[PetDataStoreKeys.PET_SATIETY] = status.satiety

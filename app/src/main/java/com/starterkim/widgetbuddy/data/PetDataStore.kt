@@ -76,8 +76,8 @@ object PetDataStoreKeys {
  */
 fun Preferences.toPetStatus(): com.starterkim.widgetbuddy.domain.PetStatus {
     return com.starterkim.widgetbuddy.domain.PetStatus(
-        type = com.starterkim.widgetbuddy.domain.PetType.fromString(this[PetDataStoreKeys.PET_TYPE]),
-        state = com.starterkim.widgetbuddy.domain.PetState.fromString(this[PetDataStoreKeys.PET_STATE]),
+        type = com.starterkim.widgetbuddy.domain.PetType.fromId(this[PetDataStoreKeys.PET_TYPE]),
+        state = com.starterkim.widgetbuddy.domain.PetState.fromId(this[PetDataStoreKeys.PET_STATE]),
         name = this[PetDataStoreKeys.PET_NAME] ?: "뽀짝이",
         userName = this[PetDataStoreKeys.USER_NAME] ?: "주인님",
         satiety = this[PetDataStoreKeys.PET_SATIETY] ?: 100,

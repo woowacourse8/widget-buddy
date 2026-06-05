@@ -56,6 +56,7 @@ object PetDataStoreKeys {
     val LAST_MAIN_APP_VISIT_TIMESTAMP = longPreferencesKey("last_main_app_visit_timestamp")
     val LAST_FED_TIMESTAMP = longPreferencesKey("last_fed_timestamp")
     val LAST_PLAYED_TIMESTAMP = longPreferencesKey("last_played_timestamp")
+    val LAST_TALK_TIMESTAMP = longPreferencesKey("last_talk_timestamp")
     val SATIETY_ZERO_TIMESTAMP = longPreferencesKey("satiety_zero_timestamp")
     val JOY_ZERO_TIMESTAMP = longPreferencesKey("joy_zero_timestamp")
     val LAST_AFFECTION_UPDATE_DATE = stringPreferencesKey("last_affection_update_date")
@@ -106,6 +107,7 @@ fun Preferences.toPetStatus(context: android.content.Context): com.starterkim.wi
         lastMainAppVisitTimestamp = this[PetDataStoreKeys.LAST_MAIN_APP_VISIT_TIMESTAMP] ?: 0L,
         lastFedTimestamp = this[PetDataStoreKeys.LAST_FED_TIMESTAMP] ?: 0L,
         lastPlayedTimestamp = this[PetDataStoreKeys.LAST_PLAYED_TIMESTAMP] ?: 0L,
+        lastTalkTimestamp = this[PetDataStoreKeys.LAST_TALK_TIMESTAMP] ?: 0L,
         satietyZeroTimestamp = this[PetDataStoreKeys.SATIETY_ZERO_TIMESTAMP] ?: 0L,
         joyZeroTimestamp = this[PetDataStoreKeys.JOY_ZERO_TIMESTAMP] ?: 0L,
         lastAffectionUpdateDate = this[PetDataStoreKeys.LAST_AFFECTION_UPDATE_DATE] ?: "",

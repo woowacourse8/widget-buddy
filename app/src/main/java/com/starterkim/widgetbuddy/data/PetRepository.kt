@@ -43,6 +43,7 @@ class PetRepository(private val context: Context) {
         prefs[PetDataStoreKeys.LAST_MAIN_APP_VISIT_TIMESTAMP] = status.lastMainAppVisitTimestamp
         prefs[PetDataStoreKeys.LAST_FED_TIMESTAMP] = status.lastFedTimestamp
         prefs[PetDataStoreKeys.LAST_PLAYED_TIMESTAMP] = status.lastPlayedTimestamp
+        prefs[PetDataStoreKeys.LAST_TALK_TIMESTAMP] = status.lastTalkTimestamp
         prefs[PetDataStoreKeys.SATIETY_ZERO_TIMESTAMP] = status.satietyZeroTimestamp
         prefs[PetDataStoreKeys.JOY_ZERO_TIMESTAMP] = status.joyZeroTimestamp
         prefs[PetDataStoreKeys.LAST_AFFECTION_UPDATE_DATE] = status.lastAffectionUpdateDate

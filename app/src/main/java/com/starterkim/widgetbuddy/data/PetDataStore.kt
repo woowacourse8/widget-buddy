@@ -1,6 +1,7 @@
 package com.starterkim.widgetbuddy.data
 
 import android.content.Context
+import android.content.res.Configuration
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.intPreferencesKey
@@ -10,6 +11,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.glance.state.GlanceStateDefinition
 import java.io.File
+import java.util.Locale
 
 /**
  * 앱 전체에서 사용할 DataStore 인스턴스
@@ -66,20 +68,35 @@ object PetDataStoreKeys {
     // 이름 (펫 / 유저)
     val PET_NAME = stringPreferencesKey("pet_name")
     val USER_NAME = stringPreferencesKey("user_name")
+    
+    // 언어 설정 (ko, en)
+    val LANGUAGE = stringPreferencesKey("language")
 
     // 펫이 보내는 일회성 메시지
     val PET_MESSAGE = stringPreferencesKey("pet_message")
 }
 
 /**
+ * 지정된 언어 태그가 적용된 Context를 반환한다.
+ * 위젯이 시스템 locale이 아닌 사용자가 선택한 언어로 문자열을 해석할 때 사용한다.
+ */
+fun Context.localizedFor(languageTag: String): Context {
+    val locale = Locale.forLanguageTag(languageTag)
+    val config = Configuration(resources.configuration)
+    config.setLocale(locale)
+    return createConfigurationContext(config)
+}
+
+/**
  * Preferences 객체를 PetStatus 도메인 모델로 변환한다.
  */
-fun Preferences.toPetStatus(): com.starterkim.widgetbuddy.domain.PetStatus {
+fun Preferences.toPetStatus(context: android.content.Context): com.starterkim.widgetbuddy.domain.PetStatus {
     return com.starterkim.widgetbuddy.domain.PetStatus(
         type = com.starterkim.widgetbuddy.domain.PetType.fromId(this[PetDataStoreKeys.PET_TYPE]),
         state = com.starterkim.widgetbuddy.domain.PetState.fromId(this[PetDataStoreKeys.PET_STATE]),
-        name = this[PetDataStoreKeys.PET_NAME] ?: "뽀짝이",
-        userName = this[PetDataStoreKeys.USER_NAME] ?: "주인님",
+        name = this[PetDataStoreKeys.PET_NAME] ?: "",
+        userName = this[PetDataStoreKeys.USER_NAME] ?: "",
+        language = this[PetDataStoreKeys.LANGUAGE] ?: "ko",
         satiety = this[PetDataStoreKeys.PET_SATIETY] ?: 100,
         joy = this[PetDataStoreKeys.PET_JOY] ?: 100,
         misery = this[PetDataStoreKeys.PET_MISERY] ?: 0,

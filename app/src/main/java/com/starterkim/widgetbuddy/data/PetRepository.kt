@@ -15,14 +15,14 @@ class PetRepository(private val context: Context) {
     /**
      * 현재 펫의 상태를 Flow로 반환한다.
      */
-    val petStatus: Flow<PetStatus> = context.dataStore.data.map { it.toPetStatus() }
+    val petStatus: Flow<PetStatus> = context.dataStore.data.map { it.toPetStatus(context) }
 
     /**
      * 펫 상태를 업데이트한다. (고차 함수를 통해 도메인 로직 적용 가능)
      */
     suspend fun updateStatus(transform: (PetStatus) -> PetStatus) {
         context.dataStore.edit { prefs ->
-            val currentStatus = prefs.toPetStatus()
+            val currentStatus = prefs.toPetStatus(context)
             val newStatus = transform(currentStatus)
             saveToPrefs(newStatus, prefs)
         }
@@ -33,6 +33,7 @@ class PetRepository(private val context: Context) {
         prefs[PetDataStoreKeys.PET_STATE] = status.state.id
         prefs[PetDataStoreKeys.PET_NAME] = status.name
         prefs[PetDataStoreKeys.USER_NAME] = status.userName
+        prefs[PetDataStoreKeys.LANGUAGE] = status.language
         prefs[PetDataStoreKeys.PET_SATIETY] = status.satiety
         prefs[PetDataStoreKeys.PET_JOY] = status.joy
         prefs[PetDataStoreKeys.PET_MISERY] = status.misery

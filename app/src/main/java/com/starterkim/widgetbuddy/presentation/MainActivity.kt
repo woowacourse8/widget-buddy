@@ -3,21 +3,27 @@ package com.starterkim.widgetbuddy.presentation
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,8 +31,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.os.LocaleListCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.glance.appwidget.updateAll
 import androidx.lifecycle.ViewModel
@@ -41,8 +49,8 @@ import com.starterkim.widgetbuddy.R
 import com.starterkim.widgetbuddy.data.petRepository
 import com.starterkim.widgetbuddy.domain.PetStatus
 import com.starterkim.widgetbuddy.presentation.common.BottomNavigationBar
-import com.starterkim.widgetbuddy.presentation.room.RoomScreen
 import com.starterkim.widgetbuddy.presentation.common.theme.WidgetBuddyTheme
+import com.starterkim.widgetbuddy.presentation.room.RoomScreen
 import com.starterkim.widgetbuddy.presentation.widget.PetWidget
 import kotlinx.coroutines.launch
 
@@ -51,12 +59,13 @@ enum class MainScreen {
     SETTINGS,
 }
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
     private var mRewardedAd: RewardedAd? = null
 
     private val viewModel: MainViewModel by viewModels {
         object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                @Suppress("UNCHECKED_CAST")
                 return MainViewModel(petRepository) as T
             }
         }
@@ -76,6 +85,16 @@ class MainActivity : ComponentActivity() {
         setContent {
             WidgetBuddyTheme {
                 val status by viewModel.petStatus.collectAsState()
+
+                LaunchedEffect(status.language) {
+                    val appLocales = AppCompatDelegate.getApplicationLocales()
+                    if (appLocales.toLanguageTags() != status.language) {
+                        AppCompatDelegate.setApplicationLocales(
+                            LocaleListCompat.forLanguageTags(status.language)
+                        )
+                    }
+                }
+
                 MainAppScreen(status)
             }
         }
@@ -122,9 +141,26 @@ class MainActivity : ComponentActivity() {
         loadRewardedAd()
     }
 
+    /**
+     * 앱과 위젯의 언어를 동시에 변경한다.
+     * DataStore 쓰기 → 위젯 갱신 → 앱 locale 적용 순서로 진행해
+     * 액티비티 재생성 후에도 위젯과 앱이 같은 언어로 일관되게 보이도록 한다.
+     */
+    private fun changeLanguage(langCode: String) {
+        val appContext = applicationContext
+        lifecycleScope.launch {
+            appContext.petRepository.updateStatus { it.copy(language = langCode) }
+            PetWidget().updateAll(appContext)
+            AppCompatDelegate.setApplicationLocales(
+                LocaleListCompat.forLanguageTags(langCode)
+            )
+        }
+    }
+
     @Composable
     fun MainAppScreen(status: PetStatus) {
         var currentScreen by remember { mutableStateOf(MainScreen.PET_HOUSE) }
+        val context = LocalContext.current
 
         Scaffold(
             bottomBar = {
@@ -145,14 +181,24 @@ class MainActivity : ComponentActivity() {
                             petStatus = status,
                             onShowAd = { showAdAndBringPetBack() },
                             onGiveLoveClick = {
-                                viewModel.giveLoveAndGetPoints { message ->
+                                viewModel.giveLoveAndGetPoints { newPoints ->
                                     lifecycleScope.launch {
                                         PetWidget().updateAll(this@MainActivity)
                                     }
-                                    if (message != null) {
-                                        Toast.makeText(this@MainActivity, message, Toast.LENGTH_LONG).show()
+                                    if (newPoints != null) {
+                                        val msg = when (newPoints) {
+                                            5 -> getString(R.string.love_reward_carpet)
+                                            10 -> getString(R.string.love_reward_fireplace)
+                                            20 -> getString(R.string.love_reward_sofa)
+                                            else -> getString(R.string.love_reward_points, newPoints)
+                                        }
+                                        Toast.makeText(this@MainActivity, msg, Toast.LENGTH_LONG).show()
                                     } else {
-                                        Toast.makeText(this@MainActivity, getString(R.string.already_gave_love, status.decorPoints), Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(
+                                            this@MainActivity,
+                                            getString(R.string.already_gave_love, status.decorPoints),
+                                            Toast.LENGTH_SHORT
+                                        ).show()
                                     }
                                 }
                             }
@@ -168,6 +214,7 @@ class MainActivity : ComponentActivity() {
     fun SettingsScreen(status: PetStatus) {
         var petNameInput by remember { mutableStateOf("") }
         var userNameInput by remember { mutableStateOf("") }
+        val context = LocalContext.current
 
         Column(
             modifier = Modifier
@@ -180,47 +227,98 @@ class MainActivity : ComponentActivity() {
                 style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier.padding(bottom = 8.dp),
             )
-            Text(stringResource(R.string.pet_status_info, status.name, status.userName))
+            // 표시용 이름 사용 (getDisplayName)
+            Text(
+                stringResource(
+                    R.string.pet_status_info,
+                    status.getDisplayName(context),
+                    status.getDisplayUserName(context)
+                )
+            )
             Spacer(modifier = Modifier.height(32.dp))
 
-            Text(text = stringResource(R.string.input_new_pet_name_title), style = MaterialTheme.typography.titleLarge)
-            Spacer(modifier = Modifier.height(16.dp))
+            // 펫 이름 변경
+            Text(
+                text = stringResource(R.string.input_new_pet_name_title),
+                style = MaterialTheme.typography.titleLarge
+            )
+            Spacer(modifier = Modifier.height(8.dp))
             TextField(
                 value = petNameInput,
                 onValueChange = { petNameInput = it },
                 label = { Text(stringResource(R.string.new_pet_name_label)) },
+                modifier = Modifier.fillMaxWidth()
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             Button(onClick = {
                 if (petNameInput.isNotBlank()) {
                     viewModel.updatePetName(petNameInput)
                     lifecycleScope.launch { PetWidget().updateAll(this@MainActivity) }
-                    Toast.makeText(this@MainActivity, getString(R.string.pet_name_save_complete), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@MainActivity,
+                        getString(R.string.pet_name_save_complete),
+                        Toast.LENGTH_SHORT
+                    ).show()
                     petNameInput = ""
                 }
-            }) {
+            }, modifier = Modifier.fillMaxWidth()) {
                 Text(stringResource(R.string.save_pet_name))
             }
 
-            Spacer(modifier = Modifier.height(48.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
-            Text(text = stringResource(R.string.input_user_name_title), style = MaterialTheme.typography.titleLarge)
-            Spacer(modifier = Modifier.height(16.dp))
+            // 주인님 이름 변경
+            Text(
+                text = stringResource(R.string.input_user_name_title),
+                style = MaterialTheme.typography.titleLarge
+            )
+            Spacer(modifier = Modifier.height(8.dp))
             TextField(
                 value = userNameInput,
                 onValueChange = { userNameInput = it },
                 label = { Text(stringResource(R.string.user_name_label)) },
+                modifier = Modifier.fillMaxWidth()
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             Button(onClick = {
                 if (userNameInput.isNotBlank()) {
                     viewModel.updateUserName(userNameInput)
                     lifecycleScope.launch { PetWidget().updateAll(this@MainActivity) }
-                    Toast.makeText(this@MainActivity, getString(R.string.user_name_save_complete), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@MainActivity,
+                        getString(R.string.user_name_save_complete),
+                        Toast.LENGTH_SHORT
+                    ).show()
                     userNameInput = ""
                 }
-            }) {
+            }, modifier = Modifier.fillMaxWidth()) {
                 Text(stringResource(R.string.save_user_name))
+            }
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // 언어 설정 영역
+            Text(
+                text = stringResource(R.string.language_settings_title),
+                style = MaterialTheme.typography.titleLarge
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Row(modifier = Modifier.fillMaxWidth()) {
+                Button(
+                    onClick = { changeLanguage("ko") },
+                    modifier = Modifier.weight(1f),
+                    colors = if (status.language == "ko") ButtonDefaults.buttonColors() else ButtonDefaults.filledTonalButtonColors()
+                ) {
+                    Text(stringResource(R.string.lang_ko))
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+                Button(
+                    onClick = { changeLanguage("en") },
+                    modifier = Modifier.weight(1f),
+                    colors = if (status.language == "en") ButtonDefaults.buttonColors() else ButtonDefaults.filledTonalButtonColors()
+                ) {
+                    Text(stringResource(R.string.lang_en))
+                }
             }
         }
     }

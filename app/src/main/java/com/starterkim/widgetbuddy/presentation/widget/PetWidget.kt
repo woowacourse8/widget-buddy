@@ -23,6 +23,7 @@ import androidx.glance.preview.ExperimentalGlancePreviewApi
 import androidx.glance.preview.Preview
 import com.starterkim.widgetbuddy.R
 import com.starterkim.widgetbuddy.data.PetStateDefinition
+import com.starterkim.widgetbuddy.data.localizedFor
 import com.starterkim.widgetbuddy.data.toPetStatus
 import com.starterkim.widgetbuddy.domain.PetState
 import com.starterkim.widgetbuddy.domain.PetType
@@ -48,15 +49,16 @@ class PetWidget : GlanceAppWidget() {
     @SuppressLint("RestrictedApi")
     @Composable
     private fun PetWidgetContent(context: Context, prefs: Preferences?) {
-        val status = prefs?.toPetStatus() ?: com.starterkim.widgetbuddy.domain.PetStatus()
+        val status = prefs?.toPetStatus(context) ?: com.starterkim.widgetbuddy.domain.PetStatus()
+        val localizedContext = context.localizedFor(status.language)
 
         val textToShow = PetDialogueMapper.getDialogue(
-            context,
+            localizedContext,
             status.state,
             status.satiety,
             status.joy,
-            status.name,
-            status.userName,
+            status.getDisplayName(localizedContext),
+            status.getDisplayUserName(localizedContext),
             status.message,
         )
 
@@ -66,7 +68,7 @@ class PetWidget : GlanceAppWidget() {
 
         PetWidgetContent(
             petState = status.state,
-            petName = status.name,
+            petName = status.getDisplayName(localizedContext),
             petImageRes = petImageRes,
             petImageSize = petImageSize,
             touchAreaSize = touchAreaSize,

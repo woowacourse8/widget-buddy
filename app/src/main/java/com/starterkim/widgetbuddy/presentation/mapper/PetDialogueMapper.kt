@@ -14,7 +14,13 @@ object PetDialogueMapper {
         userName: String,
         petMessage: String,
     ): String {
-        if (petMessage.isNotBlank()) return petMessage
+        if (petMessage.isNotBlank()) {
+            return when (petMessage) {
+                "already_full" -> context.getString(R.string.already_full)
+                "already_playing" -> context.getString(R.string.already_playing)
+                else -> petMessage
+            }
+        }
 
         return when (state) {
             PetState.EGG -> "..."

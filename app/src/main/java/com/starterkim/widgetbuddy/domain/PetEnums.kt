@@ -41,15 +41,33 @@ enum class PetType(
     BAPSAE(
         id = "bapsae",
         idleImage = R.drawable.bapsae_idle,
-...
+        lonelyImage = R.drawable.bapsae_lonely,
+        boredImage = R.drawable.bapsae_bored,
+        hungryImage = R.drawable.bapsae_hungry,
+        fullImage = R.drawable.bapsae_full,
+        joyfulImage = R.drawable.bapsae_joyful,
+        warningImage = R.drawable.bapsae_warning,
+    ),
     DRAGON(
         id = "dragon",
         idleImage = R.drawable.dragon_idle,
-...
+        lonelyImage = R.drawable.dragon_lonely,
+        boredImage = R.drawable.dragon_bored,
+        hungryImage = R.drawable.dragon_hungry,
+        fullImage = R.drawable.dragon_full,
+        joyfulImage = R.drawable.dragon_joyful,
+        warningImage = R.drawable.dragon_warning,
+    ),
     NONE(
         id = "none",
         idleImage = R.drawable.egg,
-...
+        lonelyImage = R.drawable.egg,
+        boredImage = R.drawable.egg,
+        hungryImage = R.drawable.egg,
+        fullImage = R.drawable.egg,
+        joyfulImage = R.drawable.egg,
+        warningImage = R.drawable.egg,
+    ),
     ;
 
     companion object {

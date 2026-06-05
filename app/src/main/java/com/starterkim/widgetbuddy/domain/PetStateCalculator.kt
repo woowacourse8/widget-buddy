@@ -68,7 +68,7 @@ object PetStateCalculator {
         else updatedStatus.lastFedTimestamp
 
         if (currentTime - lastFedTime < SATIETY_FULL_DURATION_MS) {
-            return updatedStatus.copy(message = "배불러요!")
+            return updatedStatus.copy(message = "already_full")
         }
 
         return updatedStatus.copy(
@@ -91,7 +91,7 @@ object PetStateCalculator {
         else updatedStatus.lastPlayedTimestamp
 
         if (currentTime - lastPlayedTime < JOY_FULL_DURATION_MS) {
-            return updatedStatus.copy(message = "아직 안 심심해!")
+            return updatedStatus.copy(message = "already_playing")
         }
 
         return updatedStatus.copy(
@@ -121,7 +121,7 @@ object PetStateCalculator {
             else -> PetState.IDLE
         }
 
-        return status.copy(state = nextState)
+        return status.copy(state = nextState, message = "")
     }
 
     fun bringPetBack(status: PetStatus): PetStatus {

@@ -1,0 +1,77 @@
+<resources>
+    <string name="app_name">Widget Buddy</string>
+    
+    <!-- MainActivity -->
+    <string name="ad_loading_try_later">Loading ad... Please try again in a moment.</string>
+    <string name="pet_returned">Your pet has returned!</string>
+    <string name="already_gave_love">You already gave love today. (Total %1$d P)</string>
+    <string name="current_settings">Current Settings</string>
+    <string name="pet_status_info">Pet: %1$s, Master: %2$s</string>
+    <string name="input_new_pet_name_title">Give your pet a new name!</string>
+    <string name="new_pet_name_label">Enter new pet name</string>
+    <string name="pet_name_save_complete">Pet name saved!</string>
+    <string name="save_pet_name">Save Pet Name</string>
+    <string name="input_user_name_title">Tell me your name!</string>
+    <string name="user_name_label">Enter master name</string>
+    <string name="user_name_save_complete">Master name saved!</string>
+    <string name="save_user_name">Save Master Name</string>
+    
+    <!-- Pet interaction feedback messages -->
+    <string name="already_full">I\'m still full!</string>
+    <string name="already_playing">I\'m not bored yet!</string>
+    <string name="love_reward_carpet">A cozy carpet appeared in the room! (5P achieved)</string>
+    <string name="love_reward_fireplace">A warm fireplace appeared! (10P achieved)</string>
+    <string name="love_reward_sofa">A fluffy sofa appeared! (20P achieved)</string>
+    <string name="love_reward_points">Love given! (Current: %1$d P)</string>
+
+    <!-- Language Settings -->
+    <string name="language_settings_title">Language Settings</string>
+    <string name="lang_ko">한국어 (Korean)</string>
+    <string name="lang_en">English</string>
+    <string name="language_change_complete">Language has been changed.</string>
+    
+    <!-- Defaults -->
+    <string name="default_pet_name">Buddy</string>
+    <string name="default_user_name">Master</string>
+
+    <!-- PetActionButton -->
+    <string name="action_bring_pet_back">[Watch Ad] Bring Pet Back</string>
+    <string name="action_still_egg">Still an egg. Please hatch it in the widget!</string>
+    <string name="action_give_love">Give Love ❤️ (+1 Point)</string>
+
+    <!-- PetDialogueMapper -->
+    <string name="state_satiety_low">I\'m hungry... Feed me! (Satiety: %1$d)</string>
+    <string name="state_bored">I\'m bored... Play with me! (Joy: %1$d)</string>
+    <string name="stats_format">Fullness: %1$d, Joy: %2$d</string>
+    <string name="dialogue_miss_user">I miss you, %1$s!</string>
+    <string name="dialogue_weather">How\'s the weather today?</string>
+    <string name="dialogue_hehe">Hehe...</string>
+    <string name="dialogue_what_time">What time is it now?</string>
+    <string name="dialogue_rolling">Rolling around...</string>
+    <string name="dialogue_watching">Were you watching me?</string>
+    <string name="dialogue_what_doing">What are you doing, %1$s?</string>
+    <string name="dialogue_doing_well">I\'m doing well!</string>
+    <string name="dialogue_home_best">Home is the best.</string>
+    <string name="dialogue_pet_cute">Is %1$s cute?</string>
+    <string name="feedback_yam">Yum yum! That was delicious! 😋</string>
+    <string name="feedback_full">I\'m so full! Awesome! (Satiety: %1$d)</string>
+    <string name="feedback_full_thanks">I feel energetic! Thanks!</string>
+    <string name="feedback_sleepy">I\'m getting sleepy... Zzz</string>
+    <string name="feedback_joyful">Hehe! This is so fun! >_&lt;</string>
+    <string name="feedback_happy">I\'m the happiest pet in the world! (Joy: %1$d)</string>
+    <string name="feedback_energy">I\'m full of energy! Thanks!</string>
+    <string name="feedback_play_again">Let\'s play again next time!</string>
+    <string name="needs_love_1">When are you coming home?</string>
+    <string name="needs_love_2">Come see me in the app!</string>
+    <string name="needs_love_3">I have something to say... (tap)</string>
+    <string name="needs_love_4">(Looking around) Do you have time now?</string>
+    <string name="warning_1">I\'m... really exhausted.</string>
+    <string name="warning_2">Maybe... we\'re not meant to be.</string>
+    <string name="warning_3">Am I... being abandoned? T_T</string>
+    <string name="warning_4">I feel... completely forgotten.</string>
+    <string name="warning_5">I might... have to get ready to leave.</string>
+    <string name="runaway_1">I\'m going to... go on a trip for a while.</string>
+    <string name="runaway_2">I waited for you... but you never came. \n Take care.</string>
+    <string name="runaway_3">I don\'t think there\'s a reason to stay here anymore. \n Goodbye.</string>
+    <string name="runaway_4">Did I... become a burden? \n I\'ll quietly disappear.</string>
+</resources>

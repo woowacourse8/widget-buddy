@@ -6,8 +6,9 @@ package com.starterkim.widgetbuddy.domain
 data class PetStatus(
     val type: PetType = PetType.NONE,
     val state: PetState = PetState.EGG,
-    val name: String = "뽀짝이",
-    val userName: String = "주인님",
+    val name: String = "",
+    val userName: String = "",
+    val language: String = "ko",
     
     // 스탯
     val satiety: Int = 100,
@@ -35,4 +36,12 @@ data class PetStatus(
 ) {
     val isEgg: Boolean get() = type == PetType.NONE || state == PetState.EGG
     val hasRunAway: Boolean get() = state == PetState.RUNAWAY
+
+    fun getDisplayName(context: android.content.Context): String {
+        return name.ifBlank { context.getString(com.starterkim.widgetbuddy.R.string.default_pet_name) }
+    }
+
+    fun getDisplayUserName(context: android.content.Context): String {
+        return userName.ifBlank { context.getString(com.starterkim.widgetbuddy.R.string.default_user_name) }
+    }
 }

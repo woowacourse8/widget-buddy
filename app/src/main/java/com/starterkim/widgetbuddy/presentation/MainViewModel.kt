@@ -60,9 +60,13 @@ class MainViewModel(private val repository: PetRepository) : ViewModel() {
      * 사랑을 주고 포인트를 획득하는 로직.
      * 결과 메시지를 콜백으로 전달한다.
      */
-    fun giveLoveAndGetPoints(onResult: (String?) -> Unit) {
+    /**
+     * 사랑을 주고 포인트를 획득하는 로직.
+     * 새로 획득한 포인트 합계를 콜백으로 전달하고, 오늘 이미 줬다면 null을 전달한다.
+     */
+    fun giveLoveAndGetPoints(onResult: (newPoints: Int?) -> Unit) {
         viewModelScope.launch {
-            var resultMessage: String? = null
+            var earnedPoints: Int? = null
             repository.updateStatus { status ->
                 if (status.isEgg || status.hasRunAway) {
                     return@updateStatus status
@@ -81,12 +85,7 @@ class MainViewModel(private val repository: PetRepository) : ViewModel() {
                         decorPoints = newPoints,
                         lastDecorPointDate = today
                     )
-                    resultMessage = when (newPoints) {
-                        5 -> "방에 포근한 카펫이 생겼다! (5P 달성)"
-                        10 -> "따뜻한 벽난로가 생겼다! (10P 달성)"
-                        20 -> "폭신한 소파가 생겼다! (20P 달성)"
-                        else -> "사랑 주기 완료! (현재 ${newPoints} P)"
-                    }
+                    earnedPoints = newPoints
                 }
 
                 // 일일 애정 지수 지급 로직
@@ -99,7 +98,7 @@ class MainViewModel(private val repository: PetRepository) : ViewModel() {
 
                 updatedStatus
             }
-            onResult(resultMessage)
+            onResult(earnedPoints)
         }
     }
 
@@ -112,6 +111,12 @@ class MainViewModel(private val repository: PetRepository) : ViewModel() {
     fun updateUserName(name: String) {
         viewModelScope.launch {
             repository.updateStatus { it.copy(userName = name) }
+        }
+    }
+
+    fun updateLanguage(langCode: String) {
+        viewModelScope.launch {
+            repository.updateStatus { it.copy(language = langCode) }
         }
     }
 }

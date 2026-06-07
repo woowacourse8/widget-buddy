@@ -50,7 +50,7 @@ import com.starterkim.widgetbuddy.R
 import com.starterkim.widgetbuddy.data.petRepository
 import com.starterkim.widgetbuddy.domain.PetStatus
 import com.starterkim.widgetbuddy.presentation.common.BottomNavigationBar
-import com.starterkim.widgetbuddy.presentation.common.theme.WidgetBuddyTheme
+import com.starterkim.widgetbuddy.presentation.theme.WidgetBuddyTheme
 import com.starterkim.widgetbuddy.presentation.room.RoomScreen
 import com.starterkim.widgetbuddy.presentation.widget.PetWidget
 import kotlinx.coroutines.launch

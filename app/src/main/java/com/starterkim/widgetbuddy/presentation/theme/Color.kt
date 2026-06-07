@@ -1,4 +1,4 @@
-package com.starterkim.widgetbuddy.presentation.common.theme
+package com.starterkim.widgetbuddy.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 

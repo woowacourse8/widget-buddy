@@ -42,12 +42,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val TAG = "MainActivity"
-        private val AD_UNIT_ID =
-            if (BuildConfig.DEBUG) {
-                "ca-app-pub-3940256099942544/5224354917"
-            } else {
-                "ca-app-pub-4729200165720419/7331412876"
-            }
+        private val AD_UNIT_ID = BuildConfig.ADMOB_AD_UNIT_ID
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

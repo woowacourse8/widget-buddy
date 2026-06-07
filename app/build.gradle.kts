@@ -1,8 +1,9 @@
 @file:Suppress("DEPRECATION")
 
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ktlint)
 }
@@ -22,9 +23,27 @@ android {
     }
 
     buildTypes {
+        debug {
+            manifestPlaceholders["ADMOB_APP_ID"] = "ca-app-pub-3940256099942544~3347511713"
+            buildConfigField("String", "ADMOB_AD_UNIT_ID", "\"ca-app-pub-3940256099942544/5224354917\"")
+        }
         release {
             isMinifyEnabled = true
             isShrinkResources = true
+
+            // local.properties에서 실제 ID 로드 (보안 및 전문적인 관리 방식)
+            val properties = Properties()
+            val localPropertiesFile = project.rootProject.file("local.properties")
+            if (localPropertiesFile.exists()) {
+                properties.load(localPropertiesFile.inputStream())
+            }
+
+            val appId = properties.getProperty("RELEASE_ADMOB_APP_ID") ?: "ca-app-pub-4729200165720419~3118203992"
+            val adUnitId = properties.getProperty("RELEASE_ADMOB_AD_UNIT_ID") ?: "ca-app-pub-4729200165720419/7331412876"
+
+            manifestPlaceholders["ADMOB_APP_ID"] = appId
+            buildConfigField("String", "ADMOB_AD_UNIT_ID", "\"$adUnitId\"")
+
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",

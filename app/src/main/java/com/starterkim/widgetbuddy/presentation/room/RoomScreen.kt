@@ -18,11 +18,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.starterkim.widgetbuddy.domain.PetState
 import com.starterkim.widgetbuddy.domain.PetStatus
+import com.starterkim.widgetbuddy.domain.PetType
 import com.starterkim.widgetbuddy.presentation.mapper.PetVisualMapper
 import com.starterkim.widgetbuddy.presentation.room.component.PetActionButton
+import com.starterkim.widgetbuddy.presentation.theme.WidgetBuddyTheme
 
 @Composable
 fun RoomScreen(
@@ -87,6 +91,46 @@ fun RoomScreen(
             petIsEgg = petIsEgg,
             onShowAd = onShowAd,
             onGiveLoveClick = onGiveLoveClick
+        )
+    }
+}
+
+@Preview(name = "룸 - 일반 상태", showBackground = true)
+@Composable
+private fun RoomScreenNormalPreview() {
+    WidgetBuddyTheme {
+        RoomScreen(
+            petStatus = PetStatus(type = PetType.BAPSAE, state = PetState.IDLE, decorPoints = 0),
+            onShowAd = {},
+            onGiveLoveClick = {}
+        )
+    }
+}
+
+@Preview(name = "룸 - 알 상태", showBackground = true)
+@Composable
+private fun RoomScreenEggPreview() {
+    WidgetBuddyTheme {
+        RoomScreen(
+            petStatus = PetStatus(type = PetType.NONE, state = PetState.EGG),
+            onShowAd = {},
+            onGiveLoveClick = {}
+        )
+    }
+}
+
+@Preview(name = "룸 - 가출 상태", showBackground = true)
+@Composable
+private fun RoomScreenRunawayPreview() {
+    WidgetBuddyTheme {
+        RoomScreen(
+            petStatus = PetStatus(
+                type = PetType.BAPSAE,
+                state = PetState.RUNAWAY,
+                decorPoints = 10
+            ),
+            onShowAd = {},
+            onGiveLoveClick = {}
         )
     }
 }

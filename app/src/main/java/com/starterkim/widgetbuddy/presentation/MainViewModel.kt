@@ -22,39 +22,9 @@ class MainViewModel(
                 initialValue = PetStatus(),
             )
 
-    fun hatchPet() {
-        viewModelScope.launch {
-            repository.updateStatus { PetStateCalculator.hatchPet(it) }
-        }
-    }
-
-    fun feedPet() {
-        viewModelScope.launch {
-            repository.updateStatus { PetStateCalculator.feedPet(it) }
-        }
-    }
-
-    fun playWithPet() {
-        viewModelScope.launch {
-            repository.updateStatus { PetStateCalculator.playWithPet(it) }
-        }
-    }
-
-    fun restoreState() {
-        viewModelScope.launch {
-            repository.updateStatus { PetStateCalculator.restoreStateAfterFeedback(it) }
-        }
-    }
-
     fun bringPetBack() {
         viewModelScope.launch {
             repository.updateStatus { PetStateCalculator.bringPetBack(it) }
-        }
-    }
-
-    fun updateMainAppVisit() {
-        viewModelScope.launch {
-            repository.updateStatus { it.copy(lastMainAppVisitTimestamp = System.currentTimeMillis()) }
         }
     }
 
@@ -115,12 +85,6 @@ class MainViewModel(
     fun updateUserName(name: String) {
         viewModelScope.launch {
             repository.updateStatus { it.copy(userName = name) }
-        }
-    }
-
-    fun updateLanguage(langCode: String) {
-        viewModelScope.launch {
-            repository.updateStatus { it.copy(language = langCode) }
         }
     }
 }

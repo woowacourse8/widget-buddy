@@ -21,7 +21,6 @@ data class PetStatus(
     val lastMainAppVisitTimestamp: Long = 0L,
     val lastFedTimestamp: Long = 0L,
     val lastPlayedTimestamp: Long = 0L,
-    val lastTalkTimestamp: Long = 0L,
     val satietyZeroTimestamp: Long = 0L,
     val joyZeroTimestamp: Long = 0L,
     // 날짜 관련 (String 형식 유지하거나 LocalDate로 변환 가능)

@@ -111,7 +111,6 @@ fun Preferences.toPetStatus(context: android.content.Context): com.starterkim.wi
         lastMainAppVisitTimestamp = this[PetDataStoreKeys.LAST_MAIN_APP_VISIT_TIMESTAMP] ?: 0L,
         lastFedTimestamp = this[PetDataStoreKeys.LAST_FED_TIMESTAMP] ?: 0L,
         lastPlayedTimestamp = this[PetDataStoreKeys.LAST_PLAYED_TIMESTAMP] ?: 0L,
-        lastTalkTimestamp = this[PetDataStoreKeys.LAST_TALK_TIMESTAMP] ?: 0L,
         satietyZeroTimestamp = this[PetDataStoreKeys.SATIETY_ZERO_TIMESTAMP] ?: 0L,
         joyZeroTimestamp = this[PetDataStoreKeys.JOY_ZERO_TIMESTAMP] ?: 0L,
         lastAffectionUpdateDate = this[PetDataStoreKeys.LAST_AFFECTION_UPDATE_DATE] ?: "",

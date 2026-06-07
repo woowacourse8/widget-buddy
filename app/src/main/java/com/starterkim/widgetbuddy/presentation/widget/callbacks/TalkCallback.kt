@@ -29,7 +29,7 @@ class TalkCallback : ActionCallback {
                     updated.getDisplayUserName(localizedContext),
                     "",
                 )
-            updated.copy(message = dialogue, lastTalkTimestamp = System.currentTimeMillis())
+            updated.copy(message = dialogue)
         }
         PetWidget().update(context, glanceId)
     }

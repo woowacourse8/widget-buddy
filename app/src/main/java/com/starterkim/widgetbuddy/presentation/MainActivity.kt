@@ -45,6 +45,7 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
+import com.starterkim.widgetbuddy.BuildConfig
 import com.starterkim.widgetbuddy.R
 import com.starterkim.widgetbuddy.data.petRepository
 import com.starterkim.widgetbuddy.domain.PetStatus
@@ -73,7 +74,11 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val TAG = "MainActivity"
-        private const val AD_UNIT_ID = "ca-app-pub-4729200165720419/7331412876"
+        private val AD_UNIT_ID = if (BuildConfig.DEBUG) {
+            "ca-app-pub-3940256099942544/5224354917"
+        } else {
+            "ca-app-pub-4729200165720419/7331412876"
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -190,13 +195,20 @@ class MainActivity : AppCompatActivity() {
                                             5 -> getString(R.string.love_reward_carpet)
                                             10 -> getString(R.string.love_reward_fireplace)
                                             20 -> getString(R.string.love_reward_sofa)
-                                            else -> getString(R.string.love_reward_points, newPoints)
+                                            else -> getString(
+                                                R.string.love_reward_points,
+                                                newPoints
+                                            )
                                         }
-                                        Toast.makeText(this@MainActivity, msg, Toast.LENGTH_LONG).show()
+                                        Toast.makeText(this@MainActivity, msg, Toast.LENGTH_LONG)
+                                            .show()
                                     } else {
                                         Toast.makeText(
                                             this@MainActivity,
-                                            getString(R.string.already_gave_love, status.decorPoints),
+                                            getString(
+                                                R.string.already_gave_love,
+                                                status.decorPoints
+                                            ),
                                             Toast.LENGTH_SHORT
                                         ).show()
                                     }

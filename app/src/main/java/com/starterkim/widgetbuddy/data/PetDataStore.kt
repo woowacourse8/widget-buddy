@@ -69,7 +69,7 @@ object PetDataStoreKeys {
     // 이름 (펫 / 유저)
     val PET_NAME = stringPreferencesKey("pet_name")
     val USER_NAME = stringPreferencesKey("user_name")
-    
+
     // 언어 설정 (ko, en)
     val LANGUAGE = stringPreferencesKey("language")
 
@@ -91,10 +91,14 @@ fun Context.localizedFor(languageTag: String): Context {
 /**
  * Preferences 객체를 PetStatus 도메인 모델로 변환한다.
  */
-fun Preferences.toPetStatus(context: android.content.Context): com.starterkim.widgetbuddy.domain.PetStatus {
-    return com.starterkim.widgetbuddy.domain.PetStatus(
-        type = com.starterkim.widgetbuddy.domain.PetType.fromId(this[PetDataStoreKeys.PET_TYPE]),
-        state = com.starterkim.widgetbuddy.domain.PetState.fromId(this[PetDataStoreKeys.PET_STATE]),
+fun Preferences.toPetStatus(context: android.content.Context): com.starterkim.widgetbuddy.domain.PetStatus =
+    com.starterkim.widgetbuddy.domain.PetStatus(
+        type =
+            com.starterkim.widgetbuddy.domain.PetType
+                .fromId(this[PetDataStoreKeys.PET_TYPE]),
+        state =
+            com.starterkim.widgetbuddy.domain.PetState
+                .fromId(this[PetDataStoreKeys.PET_STATE]),
         name = this[PetDataStoreKeys.PET_NAME] ?: "",
         userName = this[PetDataStoreKeys.USER_NAME] ?: "",
         language = this[PetDataStoreKeys.LANGUAGE] ?: "ko",
@@ -112,6 +116,5 @@ fun Preferences.toPetStatus(context: android.content.Context): com.starterkim.wi
         joyZeroTimestamp = this[PetDataStoreKeys.JOY_ZERO_TIMESTAMP] ?: 0L,
         lastAffectionUpdateDate = this[PetDataStoreKeys.LAST_AFFECTION_UPDATE_DATE] ?: "",
         lastDecorPointDate = this[PetDataStoreKeys.LAST_DECOR_POINT_DATE] ?: "",
-        message = this[PetDataStoreKeys.PET_MESSAGE] ?: ""
+        message = this[PetDataStoreKeys.PET_MESSAGE] ?: "",
     )
-}

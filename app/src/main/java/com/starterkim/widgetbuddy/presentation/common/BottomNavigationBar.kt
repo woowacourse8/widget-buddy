@@ -33,7 +33,7 @@ fun BottomNavigationBar(
 @Composable
 private fun BottomNavigationBarPreview1() {
     BottomNavigationBar(
-        currentScreen = MainScreen.PET_HOUSE
+        currentScreen = MainScreen.PET_HOUSE,
     ) { }
 }
 
@@ -41,6 +41,6 @@ private fun BottomNavigationBarPreview1() {
 @Composable
 private fun BottomNavigationBarPreview2() {
     BottomNavigationBar(
-        currentScreen = MainScreen.SETTINGS
+        currentScreen = MainScreen.SETTINGS,
     ) { }
 }

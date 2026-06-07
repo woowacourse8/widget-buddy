@@ -44,8 +44,8 @@ object PetDialogueMapper {
         satiety: Int,
         joy: Int,
         userName: String,
-    ): List<String> {
-        return listOf(
+    ): List<String> =
+        listOf(
             context.getString(R.string.stats_format, satiety, joy),
             context.getString(R.string.dialogue_miss_user, userName),
             context.getString(R.string.dialogue_weather),
@@ -58,9 +58,11 @@ object PetDialogueMapper {
             context.getString(R.string.dialogue_home_best),
             context.getString(R.string.dialogue_pet_cute, petName),
         )
-    }
 
-    private fun getFullFeedbackDialogue(context: Context, satiety: Int): List<String> =
+    private fun getFullFeedbackDialogue(
+        context: Context,
+        satiety: Int,
+    ): List<String> =
         listOf(
             context.getString(R.string.feedback_yam),
             context.getString(R.string.feedback_full, satiety),
@@ -68,7 +70,10 @@ object PetDialogueMapper {
             context.getString(R.string.feedback_sleepy),
         )
 
-    private fun getJoyfulFeedbackDialogue(context: Context, joy: Int): List<String> =
+    private fun getJoyfulFeedbackDialogue(
+        context: Context,
+        joy: Int,
+    ): List<String> =
         listOf(
             context.getString(R.string.feedback_joyful),
             context.getString(R.string.feedback_happy, joy),

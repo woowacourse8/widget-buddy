@@ -10,8 +10,9 @@ import kotlinx.coroutines.flow.map
 /**
  * PetStatus 도메인 모델과 DataStore 간의 데이터를 중계한다.
  */
-class PetRepository(private val context: Context) {
-
+class PetRepository(
+    private val context: Context,
+) {
     /**
      * 현재 펫의 상태를 Flow로 반환한다.
      */
@@ -28,7 +29,10 @@ class PetRepository(private val context: Context) {
         }
     }
 
-    private fun saveToPrefs(status: PetStatus, prefs: MutablePreferences) {
+    private fun saveToPrefs(
+        status: PetStatus,
+        prefs: MutablePreferences,
+    ) {
         prefs[PetDataStoreKeys.PET_TYPE] = status.type.id
         prefs[PetDataStoreKeys.PET_STATE] = status.state.id
         prefs[PetDataStoreKeys.PET_NAME] = status.name

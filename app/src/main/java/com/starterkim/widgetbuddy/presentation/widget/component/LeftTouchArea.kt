@@ -33,8 +33,9 @@ fun LeftTouchArea(
     val areaModifier = GlanceModifier.size(areaSize).background(debugAreaColor)
 
     Column(
-        modifier = modifier
-            .padding(start = 14.dp, end = 7.dp, top = 15.dp, bottom = 15.dp),
+        modifier =
+            modifier
+                .padding(start = 14.dp, end = 7.dp, top = 15.dp, bottom = 15.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         FeedTouchArea(petState, areaModifier)
@@ -48,17 +49,18 @@ fun LeftTouchArea(
 @Composable
 private fun FeedTouchArea(
     petState: PetState,
-    modifier: GlanceModifier = GlanceModifier
+    modifier: GlanceModifier = GlanceModifier,
 ) {
     Box(
-        modifier = modifier
-            .clickable(
-                if (petState != PetState.EGG && petState != PetState.RUNAWAY) {
-                    actionRunCallback<FeedCallback>()
-                } else {
-                    action { }
-                },
-            ),
+        modifier =
+            modifier
+                .clickable(
+                    if (petState != PetState.EGG && petState != PetState.RUNAWAY) {
+                        actionRunCallback<FeedCallback>()
+                    } else {
+                        action { }
+                    },
+                ),
     ) { }
 }
 
@@ -68,14 +70,15 @@ private fun PlayTouchArea(
     modifier: GlanceModifier,
 ) {
     Box(
-        modifier = modifier
-            .clickable(
-                if (petState != PetState.EGG && petState != PetState.RUNAWAY) {
-                    actionRunCallback<PlayCallback>()
-                } else {
-                    action { }
-                },
-            ),
+        modifier =
+            modifier
+                .clickable(
+                    if (petState != PetState.EGG && petState != PetState.RUNAWAY) {
+                        actionRunCallback<PlayCallback>()
+                    } else {
+                        action { }
+                    },
+                ),
     ) {}
 }
 
@@ -86,6 +89,6 @@ private fun LeftTouchAreaPreview() {
     LeftTouchArea(
         petState = PetState.IDLE,
         areaSize = 45.dp,
-        showTouchArea = true
+        showTouchArea = true,
     )
 }

@@ -41,9 +41,10 @@ fun SettingsScreen(
     val context = LocalContext.current
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
@@ -56,7 +57,7 @@ fun SettingsScreen(
                 R.string.pet_status_info,
                 status.getDisplayName(context),
                 status.getDisplayUserName(context),
-            )
+            ),
         )
         Spacer(modifier = Modifier.height(32.dp))
 
@@ -76,11 +77,12 @@ fun SettingsScreen(
             onClick = {
                 if (petNameInput.isNotBlank()) {
                     onSavePetName(petNameInput)
-                    Toast.makeText(
-                        context,
-                        context.getString(R.string.pet_name_save_complete),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Toast
+                        .makeText(
+                            context,
+                            context.getString(R.string.pet_name_save_complete),
+                            Toast.LENGTH_SHORT,
+                        ).show()
                     petNameInput = ""
                 }
             },
@@ -107,11 +109,12 @@ fun SettingsScreen(
             onClick = {
                 if (userNameInput.isNotBlank()) {
                     onSaveUserName(userNameInput)
-                    Toast.makeText(
-                        context,
-                        context.getString(R.string.user_name_save_complete),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Toast
+                        .makeText(
+                            context,
+                            context.getString(R.string.user_name_save_complete),
+                            Toast.LENGTH_SHORT,
+                        ).show()
                     userNameInput = ""
                 }
             },

@@ -11,14 +11,16 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class MainViewModel(private val repository: PetRepository) : ViewModel() {
-
-    val petStatus: StateFlow<PetStatus> = repository.petStatus
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = PetStatus()
-        )
+class MainViewModel(
+    private val repository: PetRepository,
+) : ViewModel() {
+    val petStatus: StateFlow<PetStatus> =
+        repository.petStatus
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5000),
+                initialValue = PetStatus(),
+            )
 
     fun hatchPet() {
         viewModelScope.launch {
@@ -58,10 +60,6 @@ class MainViewModel(private val repository: PetRepository) : ViewModel() {
 
     /**
      * 사랑을 주고 포인트를 획득하는 로직.
-     * 결과 메시지를 콜백으로 전달한다.
-     */
-    /**
-     * 사랑을 주고 포인트를 획득하는 로직.
      * 새로 획득한 포인트 합계를 콜백으로 전달하고, 오늘 이미 줬다면 null을 전달한다.
      */
     fun giveLoveAndGetPoints(onResult: (newPoints: Int?) -> Unit) {
@@ -72,28 +70,34 @@ class MainViewModel(private val repository: PetRepository) : ViewModel() {
                     return@updateStatus status
                 }
 
-                val today = java.time.LocalDate.now().toString()
-                var updatedStatus = status.copy(
-                    lastMainAppVisitTimestamp = System.currentTimeMillis(),
-                    state = PetState.IDLE
-                )
+                val today =
+                    java.time.LocalDate
+                        .now()
+                        .toString()
+                var updatedStatus =
+                    status.copy(
+                        lastMainAppVisitTimestamp = System.currentTimeMillis(),
+                        state = PetState.IDLE,
+                    )
 
                 // 포인트 지급 로직
                 if (today != status.lastDecorPointDate) {
                     val newPoints = status.decorPoints + 1
-                    updatedStatus = updatedStatus.copy(
-                        decorPoints = newPoints,
-                        lastDecorPointDate = today
-                    )
+                    updatedStatus =
+                        updatedStatus.copy(
+                            decorPoints = newPoints,
+                            lastDecorPointDate = today,
+                        )
                     earnedPoints = newPoints
                 }
 
                 // 일일 애정 지수 지급 로직
                 if (today != status.lastAffectionUpdateDate) {
-                    updatedStatus = updatedStatus.copy(
-                        affectionCount = status.affectionCount + 1,
-                        lastAffectionUpdateDate = today
-                    )
+                    updatedStatus =
+                        updatedStatus.copy(
+                            affectionCount = status.affectionCount + 1,
+                            lastAffectionUpdateDate = today,
+                        )
                 }
 
                 updatedStatus

@@ -34,19 +34,20 @@ fun RightTouchArea(
     val areaModifier = GlanceModifier.size(areaSize).background(debugAreaColor)
 
     Column(
-        modifier = modifier
-            .padding(top = 15.dp, bottom = 15.dp, start = 2.dp, end = 16.dp),
+        modifier =
+            modifier
+                .padding(top = 15.dp, bottom = 15.dp, start = 2.dp, end = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         TalkTouchArea(
             petState = petState,
-            modifier = areaModifier
+            modifier = areaModifier,
         )
 
         Spacer(modifier = GlanceModifier.height(14.dp))
 
         VisitAppTouchArea(
-            modifier = areaModifier
+            modifier = areaModifier,
         )
     }
 }
@@ -58,25 +59,25 @@ private fun TalkTouchArea(
 ) {
     // 버튼 형태가 아니라 특정 영역을 클릭했을 때 동작하고 싶어서 Box 사용
     Box(
-        modifier = modifier
-            .clickable(
-                if (petState != PetState.EGG && petState != PetState.RUNAWAY) {
-                    actionRunCallback<TalkCallback>()
-                } else {
-                    action { }
-                },
-            ),
+        modifier =
+            modifier
+                .clickable(
+                    if (petState != PetState.EGG && petState != PetState.RUNAWAY) {
+                        actionRunCallback<TalkCallback>()
+                    } else {
+                        action { }
+                    },
+                ),
     ) {}
 }
 
 @Composable
-private fun VisitAppTouchArea(
-    modifier: GlanceModifier = GlanceModifier
-) {
+private fun VisitAppTouchArea(modifier: GlanceModifier = GlanceModifier) {
     Box(
-        modifier = modifier.clickable(
-            actionStartActivity<MainActivity>(),
-        ),
+        modifier =
+            modifier.clickable(
+                actionStartActivity<MainActivity>(),
+            ),
     ) {}
 }
 
@@ -87,6 +88,6 @@ private fun RightTouchAreaPreview() {
     RightTouchArea(
         petState = PetState.IDLE,
         areaSize = 45.dp,
-        showTouchArea = true
+        showTouchArea = true,
     )
 }

@@ -53,7 +53,7 @@ object PetStateCalculator {
             satietyZeroTimestamp = 0L,
             joyZeroTimestamp = 0L,
             lastAffectionUpdateDate = "",
-            message = ""
+            message = "",
         )
     }
 
@@ -63,9 +63,12 @@ object PetStateCalculator {
         var updatedStatus = checkAndGrantDailyAffection(status)
         updatedStatus = updatedStatus.copy(lastUpdatedTimestamp = currentTime)
 
-        val lastFedTime = if (updatedStatus.lastFedTimestamp == 0L)
-            currentTime - SATIETY_TOTAL_DURATION_MS
-        else updatedStatus.lastFedTimestamp
+        val lastFedTime =
+            if (updatedStatus.lastFedTimestamp == 0L) {
+                currentTime - SATIETY_TOTAL_DURATION_MS
+            } else {
+                updatedStatus.lastFedTimestamp
+            }
 
         if (currentTime - lastFedTime < SATIETY_FULL_DURATION_MS) {
             return updatedStatus.copy(message = "already_full")
@@ -77,7 +80,7 @@ object PetStateCalculator {
             satietyZeroTimestamp = 0L,
             misery = (updatedStatus.misery - 10).coerceAtLeast(0),
             state = PetState.FULL_FEEDBACK,
-            message = ""
+            message = "",
         )
     }
 
@@ -86,9 +89,12 @@ object PetStateCalculator {
         var updatedStatus = checkAndGrantDailyAffection(status)
         updatedStatus = updatedStatus.copy(lastUpdatedTimestamp = currentTime)
 
-        val lastPlayedTime = if (updatedStatus.lastPlayedTimestamp == 0L)
-            currentTime - JOY_TOTAL_DURATION_MS
-        else updatedStatus.lastPlayedTimestamp
+        val lastPlayedTime =
+            if (updatedStatus.lastPlayedTimestamp == 0L) {
+                currentTime - JOY_TOTAL_DURATION_MS
+            } else {
+                updatedStatus.lastPlayedTimestamp
+            }
 
         if (currentTime - lastPlayedTime < JOY_FULL_DURATION_MS) {
             return updatedStatus.copy(message = "already_playing")
@@ -100,7 +106,7 @@ object PetStateCalculator {
             joyZeroTimestamp = 0L,
             misery = (updatedStatus.misery - 10).coerceAtLeast(0),
             state = PetState.JOYFUL_FEEDBACK,
-            message = ""
+            message = "",
         )
     }
 
@@ -112,14 +118,15 @@ object PetStateCalculator {
         val isSatietyLow = status.satiety <= 30
         val isBored = status.joy <= 30
 
-        val nextState = when {
-            status.misery >= 100 -> PetState.RUNAWAY
-            isWarning -> PetState.WARNING
-            isLonely -> PetState.NEEDS_LOVE
-            isSatietyLow -> PetState.SATIETY_LOW
-            isBored -> PetState.BORED
-            else -> PetState.IDLE
-        }
+        val nextState =
+            when {
+                status.misery >= 100 -> PetState.RUNAWAY
+                isWarning -> PetState.WARNING
+                isLonely -> PetState.NEEDS_LOVE
+                isSatietyLow -> PetState.SATIETY_LOW
+                isBored -> PetState.BORED
+                else -> PetState.IDLE
+            }
 
         return status.copy(state = nextState, message = "")
     }
@@ -139,7 +146,7 @@ object PetStateCalculator {
             lastPlayedTimestamp = currentTime,
             satietyZeroTimestamp = 0L,
             joyZeroTimestamp = 0L,
-            lastAffectionUpdateDate = ""
+            lastAffectionUpdateDate = "",
         )
     }
 
@@ -148,7 +155,7 @@ object PetStateCalculator {
         if (today != status.lastAffectionUpdateDate) {
             return status.copy(
                 affectionCount = status.affectionCount + 1,
-                lastAffectionUpdateDate = today
+                lastAffectionUpdateDate = today,
             )
         }
         return status
@@ -171,15 +178,16 @@ object PetStateCalculator {
         val (newJoy, joyZeroTs) = calculateJoy(status, currentTime)
         val newMisery = calculateMisery(status, newSatiety, newJoy, currentTime, elapsedTicks)
 
-        var updatedStatus = status.copy(
-            satiety = newSatiety,
-            joy = newJoy,
-            misery = newMisery,
-            lastUpdatedTimestamp = currentTime,
-            satietyZeroTimestamp = satietyZeroTs,
-            joyZeroTimestamp = joyZeroTs,
-            message = ""
-        )
+        var updatedStatus =
+            status.copy(
+                satiety = newSatiety,
+                joy = newJoy,
+                misery = newMisery,
+                lastUpdatedTimestamp = currentTime,
+                satietyZeroTimestamp = satietyZeroTs,
+                joyZeroTimestamp = joyZeroTs,
+                message = "",
+            )
 
         if (updatedStatus.state == PetState.FULL_FEEDBACK || updatedStatus.state == PetState.JOYFUL_FEEDBACK) {
             return updatedStatus
@@ -192,14 +200,15 @@ object PetStateCalculator {
             val isSatietyLow = updatedStatus.satiety <= 30
             val isBored = updatedStatus.joy <= 30
 
-            val nextState = when {
-                hasRunAway -> PetState.RUNAWAY
-                isWarning -> PetState.WARNING
-                isLonely -> PetState.NEEDS_LOVE
-                isSatietyLow -> PetState.SATIETY_LOW
-                isBored -> PetState.BORED
-                else -> PetState.IDLE
-            }
+            val nextState =
+                when {
+                    hasRunAway -> PetState.RUNAWAY
+                    isWarning -> PetState.WARNING
+                    isLonely -> PetState.NEEDS_LOVE
+                    isSatietyLow -> PetState.SATIETY_LOW
+                    isBored -> PetState.BORED
+                    else -> PetState.IDLE
+                }
             updatedStatus = updatedStatus.copy(state = nextState)
         }
 
@@ -210,21 +219,25 @@ object PetStateCalculator {
         status: PetStatus,
         currentTime: Long,
     ): Pair<Int, Long> {
-        val lastFedTime = if (status.lastFedTimestamp == 0L)
-            currentTime - SATIETY_TOTAL_DURATION_MS
-        else status.lastFedTimestamp
-
-        val elapsedSinceFed = currentTime - lastFedTime
-        val newSatiety = when {
-            elapsedSinceFed < SATIETY_FULL_DURATION_MS -> 100
-            elapsedSinceFed < SATIETY_TOTAL_DURATION_MS -> {
-                val timeIntoDecay = elapsedSinceFed - SATIETY_FULL_DURATION_MS
-                val decayProgress = timeIntoDecay.toDouble() / SATIETY_DECAY_DURATION_MS
-                (100 * (1.0 - decayProgress)).toInt().coerceIn(0, 100)
+        val lastFedTime =
+            if (status.lastFedTimestamp == 0L) {
+                currentTime - SATIETY_TOTAL_DURATION_MS
+            } else {
+                status.lastFedTimestamp
             }
 
-            else -> 0
-        }
+        val elapsedSinceFed = currentTime - lastFedTime
+        val newSatiety =
+            when {
+                elapsedSinceFed < SATIETY_FULL_DURATION_MS -> 100
+                elapsedSinceFed < SATIETY_TOTAL_DURATION_MS -> {
+                    val timeIntoDecay = elapsedSinceFed - SATIETY_FULL_DURATION_MS
+                    val decayProgress = timeIntoDecay.toDouble() / SATIETY_DECAY_DURATION_MS
+                    (100 * (1.0 - decayProgress)).toInt().coerceIn(0, 100)
+                }
+
+                else -> 0
+            }
 
         var satietyZeroTime = status.satietyZeroTimestamp
         if (newSatiety <= 0 && satietyZeroTime == 0L) {
@@ -240,21 +253,25 @@ object PetStateCalculator {
         status: PetStatus,
         currentTime: Long,
     ): Pair<Int, Long> {
-        val lastPlayedTime = if (status.lastPlayedTimestamp == 0L)
-            currentTime - JOY_TOTAL_DURATION_MS
-        else status.lastPlayedTimestamp
-
-        val elapsedSincePlayed = currentTime - lastPlayedTime
-        val newJoy = when {
-            elapsedSincePlayed < JOY_FULL_DURATION_MS -> 100
-            elapsedSincePlayed < JOY_TOTAL_DURATION_MS -> {
-                val timeIntoDecay = elapsedSincePlayed - JOY_FULL_DURATION_MS
-                val decayProcess = timeIntoDecay.toDouble() / JOY_DECAY_DURATION_MS
-                (100 * (1.0 - decayProcess)).toInt().coerceIn(0, 100)
+        val lastPlayedTime =
+            if (status.lastPlayedTimestamp == 0L) {
+                currentTime - JOY_TOTAL_DURATION_MS
+            } else {
+                status.lastPlayedTimestamp
             }
 
-            else -> 0
-        }
+        val elapsedSincePlayed = currentTime - lastPlayedTime
+        val newJoy =
+            when {
+                elapsedSincePlayed < JOY_FULL_DURATION_MS -> 100
+                elapsedSincePlayed < JOY_TOTAL_DURATION_MS -> {
+                    val timeIntoDecay = elapsedSincePlayed - JOY_FULL_DURATION_MS
+                    val decayProcess = timeIntoDecay.toDouble() / JOY_DECAY_DURATION_MS
+                    (100 * (1.0 - decayProcess)).toInt().coerceIn(0, 100)
+                }
+
+                else -> 0
+            }
 
         var joyZeroTime = status.joyZeroTimestamp
         if (newJoy <= 0 && joyZeroTime == 0L) {

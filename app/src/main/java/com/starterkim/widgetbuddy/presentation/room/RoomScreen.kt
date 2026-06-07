@@ -32,7 +32,7 @@ import com.starterkim.widgetbuddy.presentation.theme.WidgetBuddyTheme
 fun RoomScreen(
     petStatus: PetStatus,
     onShowAd: () -> Unit,
-    onGiveLoveClick: () -> Unit
+    onGiveLoveClick: () -> Unit,
 ) {
     val petIsRunaway = petStatus.hasRunAway
     val petIsEgg = petStatus.isEgg
@@ -60,8 +60,7 @@ fun RoomScreen(
                         .background(
                             Color.Black.copy(alpha = 0.5f),
                             shape = MaterialTheme.shapes.extraSmall,
-                        )
-                        .padding(horizontal = 8.dp, vertical = 4.dp),
+                        ).padding(horizontal = 8.dp, vertical = 4.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
@@ -90,7 +89,7 @@ fun RoomScreen(
             petIsRunaway = petIsRunaway,
             petIsEgg = petIsEgg,
             onShowAd = onShowAd,
-            onGiveLoveClick = onGiveLoveClick
+            onGiveLoveClick = onGiveLoveClick,
         )
     }
 }
@@ -102,7 +101,7 @@ private fun RoomScreenNormalPreview() {
         RoomScreen(
             petStatus = PetStatus(type = PetType.BAPSAE, state = PetState.IDLE, decorPoints = 0),
             onShowAd = {},
-            onGiveLoveClick = {}
+            onGiveLoveClick = {},
         )
     }
 }
@@ -114,7 +113,7 @@ private fun RoomScreenEggPreview() {
         RoomScreen(
             petStatus = PetStatus(type = PetType.NONE, state = PetState.EGG),
             onShowAd = {},
-            onGiveLoveClick = {}
+            onGiveLoveClick = {},
         )
     }
 }
@@ -124,13 +123,14 @@ private fun RoomScreenEggPreview() {
 private fun RoomScreenRunawayPreview() {
     WidgetBuddyTheme {
         RoomScreen(
-            petStatus = PetStatus(
-                type = PetType.BAPSAE,
-                state = PetState.RUNAWAY,
-                decorPoints = 10
-            ),
+            petStatus =
+                PetStatus(
+                    type = PetType.BAPSAE,
+                    state = PetState.RUNAWAY,
+                    decorPoints = 10,
+                ),
             onShowAd = {},
-            onGiveLoveClick = {}
+            onGiveLoveClick = {},
         )
     }
 }

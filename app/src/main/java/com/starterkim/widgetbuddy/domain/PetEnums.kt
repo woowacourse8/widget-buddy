@@ -7,7 +7,9 @@ import com.starterkim.widgetbuddy.R
  * 펫의 상태를 나타내는 Enum
  */
 @Keep
-enum class PetState(val id: String) {
+enum class PetState(
+    val id: String,
+) {
     EGG("egg"),
     IDLE("idle"),
     NEEDS_LOVE("needs_love"),

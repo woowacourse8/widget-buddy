@@ -48,19 +48,25 @@ class PetWidget : GlanceAppWidget() {
 
     @SuppressLint("RestrictedApi")
     @Composable
-    private fun PetWidgetContent(context: Context, prefs: Preferences?) {
-        val status = prefs?.toPetStatus(context) ?: com.starterkim.widgetbuddy.domain.PetStatus()
+    private fun PetWidgetContent(
+        context: Context,
+        prefs: Preferences?,
+    ) {
+        val status =
+            prefs?.toPetStatus(context) ?: com.starterkim.widgetbuddy.domain
+                .PetStatus()
         val localizedContext = context.localizedFor(status.language)
 
-        val textToShow = PetDialogueMapper.getDialogue(
-            localizedContext,
-            status.state,
-            status.satiety,
-            status.joy,
-            status.getDisplayName(localizedContext),
-            status.getDisplayUserName(localizedContext),
-            status.message,
-        )
+        val textToShow =
+            PetDialogueMapper.getDialogue(
+                localizedContext,
+                status.state,
+                status.satiety,
+                status.joy,
+                status.getDisplayName(localizedContext),
+                status.getDisplayUserName(localizedContext),
+                status.message,
+            )
 
         val touchAreaSize = 45.dp
         val petImageSize = 70.dp
@@ -73,7 +79,7 @@ class PetWidget : GlanceAppWidget() {
             petImageSize = petImageSize,
             touchAreaSize = touchAreaSize,
             affectionCount = status.affectionCount,
-            textToShow = textToShow
+            textToShow = textToShow,
         )
     }
 
@@ -115,13 +121,13 @@ class PetWidget : GlanceAppWidget() {
                     petImageSize = petImageSize,
                     affectionCount = affectionCount,
                     textToShow = textToShow,
-                    modifier = GlanceModifier.defaultWeight().fillMaxHeight()
+                    modifier = GlanceModifier.defaultWeight().fillMaxHeight(),
                 )
 
                 RightTouchArea(
                     petState = petState,
                     areaSize = touchAreaSize,
-                    modifier = GlanceModifier
+                    modifier = GlanceModifier,
                 )
             }
         }
@@ -142,7 +148,7 @@ class PetWidget : GlanceAppWidget() {
             petImageSize = 70.dp,
             touchAreaSize = 45.dp,
             affectionCount = 5,
-            textToShow = "안녕"
+            textToShow = "안녕",
         )
     }
 }

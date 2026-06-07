@@ -12,8 +12,8 @@ class PetTickWorker(
     private val context: Context,
     workerParams: WorkerParameters,
 ) : CoroutineWorker(context, workerParams) {
-    override suspend fun doWork(): Result {
-        return try {
+    override suspend fun doWork(): Result =
+        try {
             context.petRepository.updateStatus { status ->
                 PetStateCalculator.applyPassiveUpdates(status)
             }
@@ -29,5 +29,4 @@ class PetTickWorker(
         } catch (e: Exception) {
             Result.failure()
         }
-    }
 }

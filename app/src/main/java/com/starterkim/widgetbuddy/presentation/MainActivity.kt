@@ -42,11 +42,12 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val TAG = "MainActivity"
-        private val AD_UNIT_ID = if (BuildConfig.DEBUG) {
-            "ca-app-pub-3940256099942544/5224354917"
-        } else {
-            "ca-app-pub-4729200165720419/7331412876"
-        }
+        private val AD_UNIT_ID =
+            if (BuildConfig.DEBUG) {
+                "ca-app-pub-3940256099942544/5224354917"
+            } else {
+                "ca-app-pub-4729200165720419/7331412876"
+            }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,7 +64,7 @@ class MainActivity : AppCompatActivity() {
                     val appLocales = AppCompatDelegate.getApplicationLocales()
                     if (appLocales.toLanguageTags() != status.language) {
                         AppCompatDelegate.setApplicationLocales(
-                            LocaleListCompat.forLanguageTags(status.language)
+                            LocaleListCompat.forLanguageTags(status.language),
                         )
                     }
                 }
@@ -77,19 +78,21 @@ class MainActivity : AppCompatActivity() {
                                 PetWidget().updateAll(this@MainActivity)
                             }
                             if (newPoints != null) {
-                                val msg = when (newPoints) {
-                                    5 -> getString(R.string.love_reward_carpet)
-                                    10 -> getString(R.string.love_reward_fireplace)
-                                    20 -> getString(R.string.love_reward_sofa)
-                                    else -> getString(R.string.love_reward_points, newPoints)
-                                }
+                                val msg =
+                                    when (newPoints) {
+                                        5 -> getString(R.string.love_reward_carpet)
+                                        10 -> getString(R.string.love_reward_fireplace)
+                                        20 -> getString(R.string.love_reward_sofa)
+                                        else -> getString(R.string.love_reward_points, newPoints)
+                                    }
                                 Toast.makeText(this@MainActivity, msg, Toast.LENGTH_LONG).show()
                             } else {
-                                Toast.makeText(
-                                    this@MainActivity,
-                                    getString(R.string.already_gave_love, status.decorPoints),
-                                    Toast.LENGTH_SHORT,
-                                ).show()
+                                Toast
+                                    .makeText(
+                                        this@MainActivity,
+                                        getString(R.string.already_gave_love, status.decorPoints),
+                                        Toast.LENGTH_SHORT,
+                                    ).show()
                             }
                         }
                     },
@@ -159,7 +162,7 @@ class MainActivity : AppCompatActivity() {
             appContext.petRepository.updateStatus { it.copy(language = langCode) }
             PetWidget().updateAll(appContext)
             AppCompatDelegate.setApplicationLocales(
-                LocaleListCompat.forLanguageTags(langCode)
+                LocaleListCompat.forLanguageTags(langCode),
             )
         }
     }

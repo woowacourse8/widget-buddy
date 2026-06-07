@@ -19,15 +19,16 @@ class TalkCallback : ActionCallback {
         context.petRepository.updateStatus { status ->
             val updated = PetStateCalculator.checkAndGrantDailyAffection(status)
             val localizedContext = context.localizedFor(updated.language)
-            val dialogue = PetDialogueMapper.getDialogue(
-                localizedContext,
-                updated.state,
-                updated.satiety,
-                updated.joy,
-                updated.getDisplayName(localizedContext),
-                updated.getDisplayUserName(localizedContext),
-                "",
-            )
+            val dialogue =
+                PetDialogueMapper.getDialogue(
+                    localizedContext,
+                    updated.state,
+                    updated.satiety,
+                    updated.joy,
+                    updated.getDisplayName(localizedContext),
+                    updated.getDisplayUserName(localizedContext),
+                    "",
+                )
             updated.copy(message = dialogue, lastTalkTimestamp = System.currentTimeMillis())
         }
         PetWidget().update(context, glanceId)

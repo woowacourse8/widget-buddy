@@ -44,7 +44,7 @@ fun PetScreen(
     petImageSize: Dp,
     affectionCount: Int,
     textToShow: String,
-    modifier: GlanceModifier = GlanceModifier
+    modifier: GlanceModifier = GlanceModifier,
 ) {
     Column(
         modifier = modifier,
@@ -145,7 +145,7 @@ private fun PetScreenPreview() {
             petImageSize = 70.dp,
             affectionCount = 3,
             textToShow = "안녕 개발자",
-            modifier = GlanceModifier.fillMaxSize()
+            modifier = GlanceModifier.fillMaxSize(),
         )
     }
 }

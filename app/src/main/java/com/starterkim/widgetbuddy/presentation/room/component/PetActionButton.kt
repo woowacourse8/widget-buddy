@@ -20,15 +20,16 @@ fun PetActionButton(
     petIsRunaway: Boolean,
     petIsEgg: Boolean,
     onShowAd: () -> Unit,
-    onGiveLoveClick: () -> Unit
+    onGiveLoveClick: () -> Unit,
 ) {
     if (petIsRunaway) {
         Button(
             onClick = onShowAd,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-                .height(56.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+                    .height(56.dp),
             shape = MaterialTheme.shapes.medium,
         ) {
             Text(stringResource(R.string.action_bring_pet_back), fontSize = 18.sp)
@@ -37,10 +38,11 @@ fun PetActionButton(
         Button(
             onClick = { },
             enabled = false,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-                .height(56.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+                    .height(56.dp),
             shape = MaterialTheme.shapes.medium,
         ) {
             Text(stringResource(R.string.action_still_egg), fontSize = 14.sp)
@@ -48,10 +50,11 @@ fun PetActionButton(
     } else {
         Button(
             onClick = onGiveLoveClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-                .height(56.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+                    .height(56.dp),
             shape = MaterialTheme.shapes.medium,
         ) {
             Text(stringResource(R.string.action_give_love), fontSize = 18.sp)

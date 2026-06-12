@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Widget Buddy</string>
+    <string name="app_name">위젯버디</string>
     
     <!-- MainActivity -->
     <string name="ad_loading_try_later">광고 로드 중.. 잠시 후 다시 시도하세요.</string>

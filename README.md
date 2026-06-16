@@ -15,7 +15,7 @@
 **"어떻게 하면 안드로이드 환경에서 '살아있는' 느낌을 주는 펫을 구현할 수 있을까?"** 라는 고민에서 시작된 프로젝트로, 최신 안드로이드 UI 툴킷인 **Jetpack Glance**와 백그라운드 작업 처리를 위한 **WorkManager**를 깊이 있게 탐구하여 구현해냈습니다.
 
 * **개발 기간:** 2025.11.05 ~ 2025.11.24 (3주)
-* **배포 상태:** Google Play Store 비공개 테스트 게시 완료
+* **배포 상태:** [Google Play Store 배포 완료](https://play.google.com/store/apps/details?id=com.starterkim.widgetbuddy&hl=ko)
 <img width="910" height="587" alt="image" src="https://github.com/user-attachments/assets/45734bbc-80a6-48da-b5d0-89c1aa39a3b7" />
 
 <br>

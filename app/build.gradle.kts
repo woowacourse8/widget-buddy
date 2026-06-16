@@ -38,8 +38,10 @@ android {
                 properties.load(localPropertiesFile.inputStream())
             }
 
-            val appId = properties.getProperty("RELEASE_ADMOB_APP_ID") ?: "ca-app-pub-4729200165720419~3118203992"
-            val adUnitId = properties.getProperty("RELEASE_ADMOB_AD_UNIT_ID") ?: "ca-app-pub-4729200165720419/7331412876"
+            val appId = properties.getProperty("RELEASE_ADMOB_APP_ID")
+                ?: error("RELEASE_ADMOB_APP_ID not set in local.properties")
+            val adUnitId = properties.getProperty("RELEASE_ADMOB_AD_UNIT_ID")
+                ?: error("RELEASE_ADMOB_AD_UNIT_ID not set in local.properties")
 
             manifestPlaceholders["ADMOB_APP_ID"] = appId
             buildConfigField("String", "ADMOB_AD_UNIT_ID", "\"$adUnitId\"")

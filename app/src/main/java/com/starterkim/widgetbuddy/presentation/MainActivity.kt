@@ -7,10 +7,13 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.core.os.LocaleListCompat
+import com.starterkim.widgetbuddy.data.PetDataStoreKeys
+import com.starterkim.widgetbuddy.data.dataStore
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.glance.appwidget.updateAll
 import androidx.lifecycle.ViewModel
@@ -48,21 +51,21 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
+
+        val savedLang = runBlocking {
+            applicationContext.dataStore.data.first()[PetDataStoreKeys.LANGUAGE] ?: "ko"
+        }
+        if (AppCompatDelegate.getApplicationLocales().toLanguageTags() != savedLang) {
+            AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(savedLang))
+            return
+        }
+
         MobileAds.initialize(this) {}
         loadRewardedAd()
 
         setContent {
             WidgetBuddyTheme {
                 val status by viewModel.petStatus.collectAsState()
-
-                LaunchedEffect(status.language) {
-                    val appLocales = AppCompatDelegate.getApplicationLocales()
-                    if (appLocales.toLanguageTags() != status.language) {
-                        AppCompatDelegate.setApplicationLocales(
-                            LocaleListCompat.forLanguageTags(status.language),
-                        )
-                    }
-                }
 
                 MainAppScreen(
                     status = status,
